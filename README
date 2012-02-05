@@ -1,0 +1,6 @@
+ skel - lay out skeleton text to flesh out
+
+ USAGE
+
+ $ ./skel --template=gnu_make
+ $ ./skel --template=gnu_make,c++
