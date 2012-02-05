@@ -1,0 +1,5 @@
+.*.sw[op]
+*.o
+*.d
+gmon.out
+src/skel
