@@ -9,8 +9,9 @@
 
 namespace po = boost::program_options;
 
+// first and last are iterators over a sequence of skeleton names (strings)
 template<typename In>
-bool instantiate_skeleton_names(In first, In last)
+bool instantiate_skeletons(In first, In last)
 {
     auto const installed_end = std::partition(first, last,
                                               skel::skeleton_installed);
@@ -58,8 +59,8 @@ int main(int argc, char* argv[])
         }
         if( vm.count("skeleton") ) {
             auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
-            return ! instantiate_skeleton_names(std::begin(skeleton_names),
-                                                std::end(skeleton_names));
+            return ! instantiate_skeletons(std::begin(skeleton_names),
+                                           std::end(skeleton_names));
         }
     } catch( std::runtime_error const& e ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
