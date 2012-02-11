@@ -62,10 +62,10 @@ int main(int argc, char* argv[])
     po::options_description desc("Options");
     desc.add_options()
         ("help", "Display this help message")
-        ("list-skeletons", "")
+        ("list-skeletons", "List skeletons avilable for --skeleton")
         ("skeleton",
          po::value<std::vector<std::string>>(),
-         "skeleton to instantiate");
+         "Skeleton to instantiate");
     po::positional_options_description positional;
     positional.add("skeleton", -1);
     po::variables_map vm;
