@@ -1,5 +1,6 @@
 #include <iostream>
 #include <boost/program_options.hpp>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -50,14 +51,27 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    if( vm.count("help") ) {
-        std::cout << usage << "\n\n" << desc;
-        return 0;
-    }
-    if( vm.count("skeleton") ) {
-        auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
-        return ! instantiate_skeleton_names(std::begin(skeleton_names),
-                                            std::end(skeleton_names));
+    try {
+        if( vm.count("help") ) {
+            std::cout << usage << "\n\n" << desc;
+            return 0;
+        }
+        if( vm.count("skeleton") ) {
+            auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
+            return ! instantiate_skeleton_names(std::begin(skeleton_names),
+                                                std::end(skeleton_names));
+        }
+    } catch( std::runtime_error const& e ) {
+        TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
+            << e.what();
+        return 1;
+    } catch( std::logic_error const& e ) {
+        TEMPLOG_LOG(skel::log_developer,templog::sev_fatal,templog::aud_developer)
+            << "logic_error: " << e.what();
+        return 1;
+    } catch( ... ) {
+        TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
+            << "this is embarrassing: unknown error";
     }
     return 0;
 }
