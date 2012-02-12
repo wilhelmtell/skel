@@ -2,7 +2,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/system/error_code.hpp>
-#include <vector>
+#include <stack>
 #include "config.hh"
 
 namespace fs = boost::filesystem3;
@@ -58,7 +58,7 @@ struct copy_parts {
 
 private:
     bool committed;
-    std::vector<copy_part> stack;
+    std::stack<copy_part> parts;
 };
 
 copy_parts::copy_parts()
@@ -71,23 +71,23 @@ copy_parts::~copy_parts()
     if( ! committed ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_debug,templog::aud_developer)
             << "copy failed; rolling back ...";
-        while( ! stack.empty() )
-            stack.pop_back();
+        while( ! parts.empty() )
+            parts.pop();
     }
 }
 
 void copy_parts::commit()
 {
     committed = true;
-    while( ! stack.empty() ) {
-        stack.back().commit();
-        stack.pop_back();
+    while( ! parts.empty() ) {
+        parts.top().commit();
+        parts.pop();
     }
 }
 
 void copy_parts::add(copy_part p)
 {
-    stack.push_back(std::move(p));
+    parts.push(std::move(p));
 }
 }  // namespace
 
