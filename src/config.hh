@@ -4,6 +4,7 @@
 #include <templog/logging.h>
 
 namespace skel {
+char const * const AUTHOR_EMAIL = "matan.nassau@gmail.com";
 typedef templog::logger< templog::global_logger
                        , templog::sev_debug
                        , templog::audience_list<templog::aud_developer> >
