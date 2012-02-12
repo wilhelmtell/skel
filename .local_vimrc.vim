@@ -4,3 +4,4 @@ set wildignore+=*.o
 set wildignore+=*.d
 set wildignore+=gmon.out
 set wildignore+=src/skel
+set wildignore+=include
