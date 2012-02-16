@@ -1,5 +1,6 @@
 #include "skeleton.hh"
 #include "config.hh"
+#include "personalize_skeleton.hh"
 #include <templog/logging.h>
 #include <string>
 #include <boost/filesystem/path.hpp>
@@ -49,27 +50,49 @@ copy_part::~copy_part()
     }
 }
 
-struct copy_parts {
-    copy_parts();
-    copy_parts(copy_parts const&) = delete;
-    copy_parts& operator=(copy_parts const&) = delete;
-    copy_parts(copy_parts&&) = default;
-    ~copy_parts();
+
+struct instantiate_part {
+    instantiate_part(fs::path const& from, fs::path const& to);
 
     void commit();
-    void add(copy_part p);
+
+private:
+    copy_part cp;
+};
+
+instantiate_part::instantiate_part(fs::path const& from, fs::path const& to)
+: cp(from, to)
+{
+    skel::personalize_skeleton(to);
+}
+
+void instantiate_part::commit()
+{
+    cp.commit();
+}
+
+
+struct instantiate_parts {
+    instantiate_parts();
+    instantiate_parts(instantiate_parts const&) = delete;
+    instantiate_parts& operator=(instantiate_parts const&) = delete;
+    instantiate_parts(instantiate_parts&&) = default;
+    ~instantiate_parts();
+
+    void commit();
+    void add(instantiate_part p);
 
 private:
     bool committed;
-    std::stack<copy_part> parts;
+    std::stack<instantiate_part> parts;
 };
 
-copy_parts::copy_parts()
+instantiate_parts::instantiate_parts()
 : committed(false)
 {
 }
 
-copy_parts::~copy_parts()
+instantiate_parts::~instantiate_parts()
 {
     if( ! committed ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_debug,templog::aud_developer)
@@ -79,7 +102,7 @@ copy_parts::~copy_parts()
     }
 }
 
-void copy_parts::commit()
+void instantiate_parts::commit()
 {
     committed = true;
     while( ! parts.empty() ) {
@@ -88,7 +111,7 @@ void copy_parts::commit()
     }
 }
 
-void copy_parts::add(copy_part p)
+void instantiate_parts::add(instantiate_part p)
 {
     parts.push(std::move(p));
 }
@@ -98,7 +121,7 @@ void copy_r(fs::path const& from, fs::path const& to)
     auto const from_parent = from.parent_path();
     auto const parent_path_length = std::distance(from_parent.begin(),
                                                   from_parent.end());
-    copy_parts parts;
+    instantiate_parts parts;
     std::for_each(fs::recursive_directory_iterator(from),
                   fs::recursive_directory_iterator(),
                   [&](fs::directory_entry const& ent) {
@@ -107,7 +130,7 @@ void copy_r(fs::path const& from, fs::path const& to)
                                             parent_path_length + 1);
         auto const current_to = std::accumulate(relative_pos, current.end(),
                                                 to, std::divides<fs::path>());
-        parts.add(copy_part(current, current_to));
+        parts.add(instantiate_part(current, current_to));
     });
     parts.commit();
 }
