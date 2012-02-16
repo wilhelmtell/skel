@@ -1,5 +1,4 @@
 #include "list_skeletons.hh"
-#include <cstdlib>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -24,7 +23,7 @@ namespace skel {
 void list_skeletons()
 {
     std::ostream& out = std::cout;
-    transform_if(fs::directory_iterator(fs::path(std::getenv("HOME")) / skel::RC_DIR),
+    transform_if(fs::directory_iterator(fs::path(USER_HOME) / skel::RC_DIR),
                  fs::directory_iterator(),
                  std::ostream_iterator<std::string>(out, "\n"),
                  [](fs::directory_entry const& ent) {

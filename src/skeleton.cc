@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
-#include <cstdlib>
 
 namespace fs = boost::filesystem3;
 
@@ -124,11 +123,11 @@ void skeleton::instantiate() const
 {
     TEMPLOG_LOG(log_developer,templog::sev_info,templog::aud_developer)
         << "instantiating skeleton " << name << " ...";
-    copy_r(fs::path(std::getenv("HOME")) / RC_DIR / name, fs::current_path());
+    copy_r(fs::path(USER_HOME) / RC_DIR / name, fs::current_path());
 }
 
 bool skeleton_installed(std::string const& name)
 {
-    return fs::is_directory(fs::path(std::getenv("HOME")) / RC_DIR / name);
+    return fs::is_directory(fs::path(USER_HOME) / RC_DIR / name);
 }
 }  // namespace skel
