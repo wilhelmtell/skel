@@ -1,34 +1,14 @@
 #include <iostream>
 #include <boost/program_options.hpp>
-#include <stdexcept>
 #include <vector>
 #include <string>
-#include <algorithm>
 #include <iterator>
+#include <stdexcept>
 #include "config.hh"
 #include "skeleton.hh"
 #include "list_skeletons.hh"
 
 namespace po = boost::program_options;
-
-// first and last are iterators over a sequence of skeleton names (strings)
-template<typename In>
-bool instantiate_skeletons(In first, In last)
-{
-    auto const installed_end = std::partition(first, last,
-                                              skel::skeleton_installed);
-    if( installed_end != last ) {
-        std::for_each(installed_end, last, [](std::string const& name) {
-            TEMPLOG_LOG(skel::log_user,templog::sev_error,templog::aud_user)
-                << "skeleton " << name << " not found";
-        });
-        return false;
-    }
-    std::for_each(first, last, [](std::string const& name) {
-        skel::skeleton(name).instantiate();
-    });
-    return true;
-}
 
 int main(int argc, char* argv[])
 {
@@ -66,8 +46,8 @@ int main(int argc, char* argv[])
         }
         if( vm.count("skeleton") ) {
             auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
-            return ! instantiate_skeletons(std::begin(skeleton_names),
-                                           std::end(skeleton_names));
+            return ! skel::instantiate_skeletons(std::begin(skeleton_names),
+                                                 std::end(skeleton_names));
         }
     } catch( std::runtime_error const& e ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
