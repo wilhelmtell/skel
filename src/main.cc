@@ -14,11 +14,11 @@ int main(int argc, char* argv[])
     std::string const usage(" Usage: skel [options]");
     po::options_description desc("Options");
     desc.add_options()
-        ("help", "Display this help message")
-        ("list-skeletons", "List skeletons avilable for --skeleton")
+        ("help", "display this help message")
+        ("list-skeletons", "list skeletons avilable for --skeleton")
         ("skeleton",
          po::value<std::vector<std::string>>(),
-         "Skeleton to instantiate");
+         "pick skeleton to instantiate");
     po::positional_options_description positional;
     positional.add("skeleton", -1);
     po::variables_map vm;
