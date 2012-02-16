@@ -5,7 +5,6 @@ LDFLAGS += -lboost_program_options \
            -lboost_system \
 		   -ltemplog
 OBJ = $(CURDIR)/main.o \
-      $(CURDIR)/utility.o \
       $(CURDIR)/skeleton.o
 DEPS = $(OBJ:.o=.d)
 
