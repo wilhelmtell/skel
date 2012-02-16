@@ -2,7 +2,6 @@
 #include "config.hh"
 #include <templog/logging.h>
 #include <string>
-#include <unistd.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <algorithm>
