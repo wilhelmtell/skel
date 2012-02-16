@@ -4,38 +4,12 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iterator>
 #include "config.hh"
 #include "skeleton.hh"
-#include <boost/filesystem/operations.hpp>
-#include <iterator>
+#include "list_skeletons.hh"
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem3;
-
-template<typename In, typename Out, typename Op, typename Pred>
-Out transform_if(In first, In last, Out out, Op op, Pred pred)
-{
-    while( first != last ) {
-        if( pred(*first) ) *out++ = op(*first);
-        ++first;
-    }
-    return out;
-}
-
-void list_skeletons()
-{
-    std::ostream& out = std::cout;
-    transform_if(fs::directory_iterator(fs::path(getenv("HOME")) / skel::RC_DIR),
-                 fs::directory_iterator(),
-                 std::ostream_iterator<std::string>(out, "\n"),
-                 [](fs::directory_entry const& ent) {
-                     return ent.path().filename().string();
-                 },
-                 [](fs::directory_entry const& ent) {
-                     return fs::is_directory(ent.path());
-                 });
-    out << '\n';
-}
 
 // first and last are iterators over a sequence of skeleton names (strings)
 template<typename In>
@@ -87,7 +61,7 @@ int main(int argc, char* argv[])
             return 0;
         }
         if( vm.count("list-skeletons") ) {
-            list_skeletons();
+            skel::list_skeletons();
             return 0;
         }
         if( vm.count("skeleton") ) {
