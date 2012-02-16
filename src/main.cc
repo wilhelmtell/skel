@@ -27,7 +27,7 @@ void list_skeletons()
     std::ostream& out = std::cout;
     transform_if(fs::directory_iterator(fs::path(getenv("HOME")) / skel::RC_DIR),
                  fs::directory_iterator(),
-                 std::ostream_iterator<std::string>(out, " "),
+                 std::ostream_iterator<std::string>(out, "\n"),
                  [](fs::directory_entry const& ent) {
                      return ent.path().filename().string();
                  },
