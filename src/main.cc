@@ -2,7 +2,6 @@
 #include <boost/program_options.hpp>
 #include <vector>
 #include <string>
-#include <iterator>
 #include <stdexcept>
 #include "config.hh"
 #include "skeleton.hh"
@@ -46,8 +45,8 @@ int main(int argc, char* argv[])
         }
         if( vm.count("skeleton") ) {
             auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
-            return ! skel::instantiate_skeletons(std::begin(skeleton_names),
-                                                 std::end(skeleton_names));
+            return ! skel::instantiate_skeletons(skeleton_names.begin(),
+                                                 skeleton_names.end());
         }
     } catch( std::runtime_error const& e ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
