@@ -1,4 +1,3 @@
-//#define BOOST_SPIRIT_DEBUG
 #include "personalize_skeleton.hh"
 #include <boost/filesystem/path.hpp>
 #include <fstream>
