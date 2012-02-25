@@ -6,6 +6,7 @@
 #include "config.hh"
 #include "skeleton.hh"
 #include "list_skeletons.hh"
+#include <map>
 
 namespace po = boost::program_options;
 
@@ -48,8 +49,10 @@ int main(int argc, char* argv[])
         }
         if( vm.count("skeleton") ) {
             auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
+            std::map<std::string,std::string> subs;
             return ! skel::instantiate_skeletons(skeleton_names.begin(),
-                                                 skeleton_names.end());
+                                                 skeleton_names.end(),
+                                                 subs);
         }
     } catch( std::runtime_error const& e ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)

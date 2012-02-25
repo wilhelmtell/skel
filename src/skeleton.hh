@@ -2,13 +2,16 @@
 #define SKELETON_HH_
 
 #include <string>
+#include <map>
 
 namespace skel {
 struct skeleton {
-    explicit skeleton(std::string const& name);
+    skeleton(std::string const& name,
+             std::map<std::string,std::string> const& subs);
     void instantiate() const;
 private:
     std::string name;
+    std::map<std::string,std::string> const& subs;
 };
 
 bool skeleton_installed(std::string const& name);

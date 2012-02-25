@@ -7,6 +7,7 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
+#include <map>
 
 namespace fs = boost::filesystem3;
 namespace qi = boost::spirit::qi;
@@ -14,25 +15,25 @@ namespace phx= boost::phoenix;
 namespace fsn= boost::fusion;
 
 namespace {
-static bool process(std::string& macro)
-{
-    if( macro == "error" ) {
-        return false; // fail the parse
-    } else if( macro == "hello" ) {
-        macro = "bye";
-    } else if( macro == "bye" ) {
-        macro = "We meet again";
-    } else if( macro == "sideeffect" ) {
-        std::cerr << "this is a side effect while parsing\n";
-        macro = "(done)";
-    } else if( std::string::npos != macro.find('~') ) {
-        std::reverse(macro.begin(), macro.end());
-        macro.erase(std::remove(macro.begin(), macro.end(), '~'));
-    } else {
-        macro = std::string("<<") + macro + ">>"; // this makes the unsupported macros appear unchanged
+struct substitution {
+    substitution(std::map<std::string,std::string> const& subs)
+    : subs(subs) { }
+
+    template<typename>
+    struct result { typedef bool type; };
+
+    bool operator()(std::string& macro) const {
+        auto pos = subs.find(macro);
+        if( pos == subs.end() )
+            macro = std::string("<<") + macro + ">>";
+        else
+            macro = pos->second;
+        return true;
     }
-    return true;
-}
+
+private:
+    std::map<std::string,std::string> const& subs;
+};
 
 template<typename In, typename Out>
 struct skel_grammar : public qi::grammar<In> {
@@ -47,7 +48,9 @@ struct skel_grammar : public qi::grammar<In> {
         }
     } copy;
 
-    skel_grammar(Out& out) : skel_grammar::base_type(start)
+    skel_grammar(Out& out, std::map<std::string,std::string> const& subs)
+    : skel_grammar::base_type(start)
+    , subs(subs)
     {
         using namespace qi;
         rawch = ('\\' >> char_) | char_;
@@ -56,7 +59,7 @@ struct skel_grammar : public qi::grammar<In> {
                           % macro [ _val += _1 ] // allow nests
                          ) >>
                  ">>")
-            [ _pass = phx::bind(process, _val) ];
+            [ _pass = phx::bind(substitution(subs), _val) ];
 
         start =
             raw [ +(rawch - "<<") ] [ _pass = phx::bind(copy, _1,
@@ -74,11 +77,13 @@ private:
     qi::rule<In, char()> rawch;
     qi::rule<In, std::string()> macro;
     qi::rule<In> start;
+    std::map<std::string,std::string> const& subs;
 };
 }
 
 namespace skel {
-void personalize_skeleton(fs::path const& in_path, fs::path const& out_path)
+void personalize_skeleton(fs::path const& in_path, fs::path const& out_path,
+                          std::map<std::string,std::string> const& subs)
 {
     typedef boost::spirit::multi_pass<std::istreambuf_iterator<char>> in_iter;
     typedef std::ostream_iterator<char> out_iter;
@@ -88,7 +93,7 @@ void personalize_skeleton(fs::path const& in_path, fs::path const& out_path)
     std::ofstream out_file(out_path.string());
     out_iter out(out_file);
 
-    skel_grammar<in_iter, out_iter> grammar(out);
+    skel_grammar<in_iter, out_iter> grammar(out, subs);
     /* bool r = */ qi::parse(b, e, grammar);
 }
 }  // namespace skel

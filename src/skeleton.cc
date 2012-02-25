@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <map>
 
 namespace fs = boost::filesystem3;
 
@@ -52,19 +53,23 @@ copy_part::~copy_part()
 
 
 struct instantiate_part {
-    instantiate_part(fs::path const& from, fs::path const& to);
+    instantiate_part(fs::path const& from, fs::path const& to,
+                     std::map<std::string,std::string> const& subs);
 
     void commit();
 
 private:
     copy_part cp;
+    std::map<std::string,std::string> const& subs;
 };
 
-instantiate_part::instantiate_part(fs::path const& from, fs::path const& to)
+instantiate_part::instantiate_part(fs::path const& from, fs::path const& to,
+                                   std::map<std::string,std::string> const& subs)
 : cp(from, to)
+, subs(subs)
 {
     fs::path temp_out(to.string() + ".out");
-    skel::personalize_skeleton(to, temp_out);
+    skel::personalize_skeleton(to, temp_out, subs);
     fs::rename(temp_out, to);
 }
 
@@ -118,7 +123,8 @@ void instantiate_parts::add(instantiate_part p)
     parts.push(std::move(p));
 }
 
-void copy_r(fs::path const& from, fs::path const& to)
+void copy_r(fs::path const& from, fs::path const& to,
+            std::map<std::string,std::string> const& subs)
 {
     auto const from_parent = from.parent_path();
     auto const parent_path_length = std::distance(from_parent.begin(),
@@ -132,15 +138,17 @@ void copy_r(fs::path const& from, fs::path const& to)
                                             parent_path_length + 1);
         auto const current_to = std::accumulate(relative_pos, current.end(),
                                                 to, std::divides<fs::path>());
-        parts.add(instantiate_part(current, current_to));
+        parts.add(instantiate_part(current, current_to, subs));
     });
     parts.commit();
 }
 }  // namespace
 
 namespace skel {
-skeleton::skeleton(std::string const& name)
+skeleton::skeleton(std::string const& name,
+                   std::map<std::string,std::string> const& subs)
 : name(name)
+, subs(subs)
 {
 }
 
@@ -148,7 +156,7 @@ void skeleton::instantiate() const
 {
     TEMPLOG_LOG(log_developer,templog::sev_info,templog::aud_developer)
         << "instantiating skeleton " << name << " ...";
-    copy_r(fs::path(USER_HOME) / RC_DIR / name, fs::current_path());
+    copy_r(fs::path(USER_HOME) / RC_DIR / name, fs::current_path(), subs);
 }
 
 bool skeleton_installed(std::string const& name)

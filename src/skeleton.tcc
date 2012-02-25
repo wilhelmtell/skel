@@ -5,10 +5,12 @@
 #include "config.hh"
 #include <templog/logging.h>
 #include <algorithm>
+#include <map>
 
 namespace skel {
 template<typename In>
-bool instantiate_skeletons(In first, In last)
+bool instantiate_skeletons(In first, In last,
+                           std::map<std::string,std::string> const& subs)
 {
     auto const installed_end = std::partition(first, last,
                                               skeleton_installed);
@@ -19,8 +21,8 @@ bool instantiate_skeletons(In first, In last)
         });
         return false;
     }
-    std::for_each(first, last, [](std::string const& name) {
-        skeleton(name).instantiate();
+    std::for_each(first, last, [&subs](std::string const& name) {
+        skeleton(name, subs).instantiate();
     });
     return true;
 }
