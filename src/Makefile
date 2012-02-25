@@ -11,6 +11,7 @@ LDFLAGS += -lboost_program_options \
 OBJ = $(CURDIR)/main.o \
       $(CURDIR)/list_skeletons.o \
       $(CURDIR)/personalize_skeleton.o \
+      $(CURDIR)/load_substitutions_map.o \
       $(CURDIR)/skeleton.o
 DEPS = $(OBJ:.o=.d)
 

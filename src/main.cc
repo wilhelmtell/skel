@@ -7,6 +7,8 @@
 #include "skeleton.hh"
 #include "list_skeletons.hh"
 #include <map>
+#include <fstream>
+#include "load_substitutions_map.hh"
 
 namespace po = boost::program_options;
 
@@ -17,6 +19,7 @@ int main(int argc, char* argv[])
     desc.add_options()
         ("help", "display this help message")
         ("list-skeletons", "list skeletons avilable for --skeleton")
+        ("map-file", po::value<std::string>(), "macro-substitution map file")
         ("skeleton",
          po::value<std::vector<std::string>>()->required(),
          "pick skeleton to instantiate");
@@ -50,6 +53,10 @@ int main(int argc, char* argv[])
         if( vm.count("skeleton") ) {
             auto skeleton_names(vm["skeleton"].as<std::vector<std::string>>());
             std::map<std::string,std::string> subs;
+            if( vm.count("map-file") ) {
+                std::ifstream subs_file(vm["map-file"].as<std::string>());
+                skel::load_substitutions_map(subs_file, subs);
+            }
             return ! skel::instantiate_skeletons(skeleton_names.begin(),
                                                  skeleton_names.end(),
                                                  subs);
