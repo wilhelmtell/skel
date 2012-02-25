@@ -14,8 +14,6 @@ namespace phx= boost::phoenix;
 namespace fsn= boost::fusion;
 
 namespace {
-#define SUPPORT_ESCAPES
-
 static bool process(std::string& macro)
 {
     if( macro == "error" ) {
@@ -44,16 +42,7 @@ struct skel_grammar : public qi::grammar<In> {
 
         template<typename R, typename O>
         bool operator()(R const& r, O& o) const {
-#ifndef SUPPORT_ESCAPES
             o = std::copy(r.begin(), r.end(), o);
-#else
-            auto b = std::begin(r), e = std::end(r);
-            while( b != e ) {
-                if( '\\' == *b && e == ++b )
-                    break;
-                *o++ = *b++;
-            }
-#endif
             return true; // false to fail the parse
         }
     } copy;
@@ -61,13 +50,7 @@ struct skel_grammar : public qi::grammar<In> {
     skel_grammar(Out& out) : skel_grammar::base_type(start)
     {
         using namespace qi;
-
-#ifdef SUPPORT_ESCAPES
         rawch = ('\\' >> char_) | char_;
-#else
-# define rawch qi::char_
-#endif
-
         macro = ("<<" >> (
                           (*(rawch - ">>" - "<<") [ _val += _1 ])
                           % macro [ _val += _1 ] // allow nests
@@ -88,9 +71,7 @@ struct skel_grammar : public qi::grammar<In> {
     }
 
 private:
-#ifdef SUPPORT_ESCAPES
     qi::rule<In, char()> rawch;
-#endif
     qi::rule<In, std::string()> macro;
     qi::rule<In> start;
 };
