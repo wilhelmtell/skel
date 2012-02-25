@@ -1,14 +1,15 @@
 //#define BOOST_SPIRIT_DEBUG
 #include "personalize_skeleton.hh"
+#include <boost/filesystem/path.hpp>
 #include <fstream>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>
-#include <iostream>
+#include <boost/spirit/include/support_multi_pass.hpp>
 #include <string>
 #include <algorithm>
 #include <iterator>
-#include <sstream>
 
+namespace fs = boost::filesystem3;
 namespace qi = boost::spirit::qi;
 namespace phx= boost::phoenix;
 namespace fsn= boost::fusion;
@@ -96,38 +97,18 @@ private:
 };
 }
 
-
 namespace skel {
-void personalize_skeleton(boost::filesystem3::path const& p)
+void personalize_skeleton(fs::path const& in_path, fs::path const& out_path)
 {
-    std::ifstream file(p.string());
+    typedef boost::spirit::multi_pass<std::istreambuf_iterator<char>> in_iter;
+    typedef std::ostream_iterator<char> out_iter;
 
-    std::string input =
-        "Greeting is <<hello>> world!\n"
-        "Side effects are <<sideeffect>> and <<other>> vars are untouched\n"
-        "Empty <<>> macros are ok, as are stray '>>' pairs.\n"
-        "<<nested <<macros>> (<<hello>>?) work>>\n"
-        "The order of expansion (evaluation) is _eager_:"
-        "'<<<<hello>>>>' will expand to the same as '<<bye>>'\n"
-        "Lastly you can do algorithmic stuff too: <<!esrever ~ni <<hello>>>>\n"
-#ifdef SUPPORT_ESCAPES // bonus: escapes
-        "You can escape \\<<hello>> (not expanded to '<<hello>>')\n"
-        "Demonstrate how it <<avoids <\\<nesting\\>> macros>>.\n"
-#endif
-        ;
+    std::ifstream in_file(in_path.string());
+    in_iter b(in_file), e;
+    std::ofstream out_file(out_path.string());
+    out_iter out(out_file);
 
-    std::ostringstream oss;
-    std::ostream_iterator<char> out(oss);
-
-    skel_grammar<std::string::iterator, std::ostream_iterator<char> >
-        grammar(out);
-
-    std::string::iterator f(input.begin()), l(input.end());
-    bool r = qi::parse(f, l, grammar);
-
-    std::cout << "parse result: " << (r ? "success" : "failure") << "\n";
-    if( f != l )
-        std::cout << "unparsed remaining: '" << std::string(f, l) << "'\n";
-    std::cout << "Streamed output:\n\n" << oss.str() << '\n';
+    skel_grammar<in_iter, out_iter> grammar(out);
+    /* bool r = */ qi::parse(b, e, grammar);
 }
 }  // namespace skel
