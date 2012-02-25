@@ -48,11 +48,11 @@ struct skel_grammar : public qi::grammar<In> {
 #ifndef SUPPORT_ESCAPES
             o = std::copy(r.begin(), r.end(), o);
 #else
-            auto f = std::begin(r), l = std::end(r);
-            while( f != l ) {
-                if( '\\' == *f && l == ++f )
+            auto b = std::begin(r), e = std::end(r);
+            while( b != e ) {
+                if( '\\' == *b && e == ++b )
                     break;
-                *o++ = *f++;
+                *o++ = *b++;
             }
 #endif
             return true; // false to fail the parse
