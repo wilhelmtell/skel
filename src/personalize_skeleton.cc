@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <iterator>
 #include <map>
+#include <templog/logging.h>
+#include "config.hh"
 
 namespace fs = boost::filesystem3;
 namespace qi = boost::spirit::qi;
@@ -94,6 +96,8 @@ void personalize_skeleton(fs::path const& in_path, fs::path const& out_path,
     out_iter out(out_file);
 
     skel_grammar<in_iter, out_iter> grammar(out, subs);
+    TEMPLOG_LOG(skel::log_developer,templog::sev_debug,templog::aud_developer)
+        << "expanding macros ...";
     /* bool r = */ qi::parse(b, e, grammar);
 }
 }  // namespace skel
