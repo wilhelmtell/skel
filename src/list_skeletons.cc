@@ -32,7 +32,6 @@ void list_skeletons()
                  [](fs::directory_entry const& ent) {
                      return fs::is_directory(ent.path());
                  });
-    out << '\n';
 }
 
 }  // namespace skel
