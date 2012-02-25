@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
     } catch( ... ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
             << "unknown error. will you be so kind as to send me an email with "
-            "step-by-step instructions on how to reproduce this error? my "
-            "email address is " << skel::AUTHOR_EMAIL;
+            "step-by-step instructions on how to reproduce this error? i'd "
+            "love to fix it! my email address is " << skel::AUTHOR_EMAIL << '.';
     }
     return 0;
 }
