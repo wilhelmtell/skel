@@ -68,9 +68,11 @@ instantiate_part::instantiate_part(fs::path const& from, fs::path const& to,
 : cp(from, to)
 , subs(subs)
 {
-    fs::path temp_out(to.string() + ".out");
-    skel::personalize_skeleton(to, temp_out, subs);
-    fs::rename(temp_out, to);
+    if( fs::is_regular_file(to) ) {
+        fs::path temp_out(to.string() + ".out");
+        skel::personalize_skeleton(to, temp_out, subs);
+        fs::rename(temp_out, to);
+    }
 }
 
 void instantiate_part::commit()
