@@ -26,7 +26,7 @@ ifdef EXTRA_WARNINGS
               -Winline
 endif
 
-CXXFLAGS += -std=c++0x -Wall -Wextra -pedantic -Werror
+CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic -Werror
 
 CPPFLAGS += $(foreach MACRO,$(MACROS),-D$(MACRO)) \
             -I$(ROOTDIR)/include
