@@ -17,18 +17,18 @@ struct copy_part {
     copy_part(fs::path const& from, fs::path const& to);
     copy_part(copy_part const&) = delete;
     copy_part& operator=(copy_part const&) = delete;
-    copy_part(copy_part&&) = default;
+    copy_part(copy_part&& rhs);
     ~copy_part();
 
     void commit();
 
 private:
-    bool committed;
+    bool owning;
     std::string to;  // HACK: should be an fs::path, but fs::path isn't moveable
 };
 
 copy_part::copy_part(fs::path const& from, fs::path const& to)
-: committed(false)
+: owning(true)
 , to(to.string())
 {
     TEMPLOG_LOG(skel::log_developer,templog::sev_debug,templog::aud_developer)
@@ -36,14 +36,22 @@ copy_part::copy_part(fs::path const& from, fs::path const& to)
     fs::copy(from, to);
 }
 
+copy_part::copy_part(copy_part&& rhs)
+: owning(false)
+, to()
+{
+    std::swap(rhs.owning, owning);
+    std::swap(rhs.to, to);
+}
+
 void copy_part::commit()
 {
-    committed = true;
+    owning = false;
 }
 
 copy_part::~copy_part()
 {
-    if( ! committed ) {
+    if( owning ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_debug,templog::aud_developer)
             << "removing " << to << " ...";
         boost::system::error_code e;
