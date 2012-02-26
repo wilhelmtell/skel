@@ -1,9 +1,5 @@
 include $(ROOTDIR)/src/common.mk
 
-ifdef DEBUG
-  MACROS += BOOST_SPIRIT_DEBUG
-endif
-
 LDFLAGS += -lboost_program_options \
            -lboost_filesystem \
            -lboost_system \
