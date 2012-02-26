@@ -9,6 +9,7 @@
 #include <map>
 #include <fstream>
 #include "load_substitutions_map.hh"
+#include "error.hh"
 
 namespace po = boost::program_options;
 
@@ -61,6 +62,10 @@ int main(int argc, char* argv[])
                                                  skeleton_names.end(),
                                                  subs);
         }
+    } catch( skel::skeleton_syntax_error const& e ) {
+        TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
+            << "skeleton syntax error.";
+        return 1;
     } catch( std::runtime_error const& e ) {
         TEMPLOG_LOG(skel::log_developer,templog::sev_error,templog::aud_developer)
             << e.what();
