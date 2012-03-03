@@ -1,5 +1,9 @@
   skel - generate files as a starting point to code
 
+This is useless and has no value whatsoever, and what's more, I have no idea
+what I'm doing.
+
+
  USAGE
 
  $ ./skel --template=gnu_make
