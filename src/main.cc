@@ -35,10 +35,6 @@ int main(int argc, char* argv[])
             std::cerr << "please specify a skeleton to instantiate.\n";
             return 1;
         }
-    } catch( po::error const& e ) {
-        TEMPLOG_LOG(skel::log_user,templog::sev_error,templog::aud_user)
-            << e.what();
-        return 1;
     }
 
     try {
