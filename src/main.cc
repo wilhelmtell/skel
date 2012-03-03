@@ -11,13 +11,13 @@ namespace po = boost::program_options;
 
 int main(int argc, char* argv[])
 {
-    std::string const usage(" Usage: skel [options]");
+    std::string const usage(" Usage: skel [options] [--skeleton=]<skeleton>");
     po::options_description desc("Options");
     desc.add_options()
         ("help", "display this help message")
         ("list-skeletons", "list skeletons avilable for --skeleton")
         ("skeleton",
-         po::value<std::vector<std::string>>(),
+         po::value<std::vector<std::string>>()->required(),
          "pick skeleton to instantiate");
     po::positional_options_description positional;
     positional.add("skeleton", -1);
@@ -28,6 +28,13 @@ int main(int argc, char* argv[])
                   .positional(positional)
                   .run(), vm);
         po::notify(vm);
+    } catch( po::required_option const& e ) {
+        if( ! vm.count("help") && ! vm.count("list-skeletons") ) {
+            TEMPLOG_LOG(skel::log_user,templog::sev_error,templog::aud_user)
+                << "required option --skeleton missing";
+            std::cerr << "please specify a skeleton to instantiate.\n";
+            return 1;
+        }
     } catch( po::error const& e ) {
         TEMPLOG_LOG(skel::log_user,templog::sev_error,templog::aud_user)
             << e.what();
