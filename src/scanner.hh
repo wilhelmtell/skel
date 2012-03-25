@@ -20,6 +20,7 @@ struct token {
     token(token_t type, std::string const& value);
 };
 
+token peek(std::istream& in);
 token scan(std::istream& in);
 }  // namespace skel
 

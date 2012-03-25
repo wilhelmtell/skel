@@ -47,13 +47,6 @@ skel::token scan_cache()
     tokens_queue.pop();
     return cached;
 }
-
-skel::token peek(std::istream& in)
-{
-    if( tokens_queue.empty() )
-        scan_force(in);
-    return tokens_queue.front();
-}
 }  // namespace
 
 namespace skel {
@@ -66,6 +59,13 @@ token::token(token_t type, std::string const& value)
 : type(type)
 , value(value)
 {
+}
+
+token peek(std::istream& in)
+{
+    if( tokens_queue.empty() )
+        scan_force(in);
+    return tokens_queue.front();
 }
 
 token scan(std::istream& in)

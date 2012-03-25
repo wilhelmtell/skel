@@ -2,7 +2,8 @@ include $(ROOTDIR)/src/common.mk
 
 LDFLAGS += -ltemplog
 OBJ = $(CURDIR)/main.o \
-      $(CURDIR)/scanner.o
+      $(CURDIR)/scanner.o \
+      $(CURDIR)/parser.o
 DEPS = $(OBJ:.o=.d)
 
 .PHONY: all clean distclean install uninstall
