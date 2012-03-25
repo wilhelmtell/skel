@@ -14,13 +14,14 @@ void scan_force(std::istream& in)
         tokens_queue.push(skel::token(skel::token::EOS));
     } else if( c == '\\' ) {
         char c1;
-        if( ! in.get(c1) )
-            throw skel::syntax_error("unexpected eos");
-        if( c1 != '\\' && c1 != '{' && c1 != '}' )
-            throw skel::syntax_error("invalid escape");
-        std::ostringstream ss;
-        ss << c1;
-        tokens_queue.push(skel::token(skel::token::ESC, ss.str()));
+        if( ! in.get(c1) ) {
+            tokens_queue.push(skel::token(skel::token::ESC, "\\"));
+            tokens_queue.push(skel::token::EOS);
+        } else {
+            std::ostringstream ss;
+            ss << c1;
+            tokens_queue.push(skel::token(skel::token::ESC, ss.str()));
+        }
     } else if( c == '{' ) {
         tokens_queue.push(skel::token(skel::token::MACRO_BEGIN));
         std::string macro;
@@ -30,7 +31,7 @@ void scan_force(std::istream& in)
         if( ! in )
             tokens_queue.push(skel::token(skel::token::EOS));
         else if( c == '\n' )
-            throw skel::syntax_error("unexpected newline; expected MACRO_END");
+            tokens_queue.push(skel::token(skel::token::TERMINAL, "\n"));
         else
             tokens_queue.push(skel::token(skel::token::MACRO_END));
     } else {

@@ -3,13 +3,8 @@
 
 #include <iosfwd>
 #include <string>
-#include <stdexcept>
 
 namespace skel {
-struct syntax_error : public std::runtime_error {
-    syntax_error(std::string const& m) : std::runtime_error(m) { }
-};
-
 struct token {
     enum token_t {
         TERMINAL = 1,
