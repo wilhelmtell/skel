@@ -16,6 +16,7 @@ struct token {
         ESC,
         MACRO_BEGIN,
         MACRO_END,
+        MACRO,
         EOS
     } type;
     std::string value;

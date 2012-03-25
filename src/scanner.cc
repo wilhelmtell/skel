@@ -2,22 +2,16 @@
 #include <iostream>
 #include <queue>
 #include <sstream>
+#include <string>
 
 namespace {
 std::queue<skel::token> tokens_queue;
 
-skel::token scan_cache()
-{
-    auto const cached = tokens_queue.front();
-    tokens_queue.pop();
-    return cached;
-}
-
-skel::token scan_force(std::istream& in)
+void scan_force(std::istream& in)
 {
     char c;
     if( ! in.get(c) ) {
-        return skel::token(skel::token::EOS);
+        tokens_queue.push(skel::token(skel::token::EOS));
     } else if( c == '\\' ) {
         char c1;
         if( ! in.get(c1) )
@@ -26,22 +20,35 @@ skel::token scan_force(std::istream& in)
             throw skel::syntax_error("invalid escape");
         std::ostringstream ss;
         ss << c1;
-        return skel::token(skel::token::ESC, ss.str());
+        tokens_queue.push(skel::token(skel::token::ESC, ss.str()));
     } else if( c == '{' ) {
-        return skel::token(skel::token::MACRO_BEGIN);
-    } else if( c == '}' ) {
-        return skel::token(skel::token::MACRO_END);
+        tokens_queue.push(skel::token(skel::token::MACRO_BEGIN));
+        std::string macro;
+        while( in.get(c) && c != '}' )
+            macro += c;
+        tokens_queue.push(skel::token(skel::token::MACRO, macro));
+        if( ! in )
+            tokens_queue.push(skel::token(skel::token::EOS));
+        else
+            tokens_queue.push(skel::token(skel::token::MACRO_END));
     } else {
         std::ostringstream ss;
         ss << c;
-        return skel::token(skel::token::TERMINAL, ss.str());
+        tokens_queue.push(skel::token(skel::token::TERMINAL, ss.str()));
     }
+}
+
+skel::token scan_cache()
+{
+    auto const cached = tokens_queue.front();
+    tokens_queue.pop();
+    return cached;
 }
 
 skel::token peek(std::istream& in)
 {
     if( tokens_queue.empty() )
-        tokens_queue.push(scan_force(in));
+        scan_force(in);
     return tokens_queue.front();
 }
 }  // namespace
@@ -61,8 +68,7 @@ token::token(token_t type, std::string const& value)
 token scan(std::istream& in)
 {
     if( tokens_queue.empty() )
-        return scan_force(in);
-    else
-        return scan_cache();
+        scan_force(in);
+    return scan_cache();
 }
 }  // namespace skel
