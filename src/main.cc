@@ -1,5 +1,4 @@
 #include "scanner.hh"
-#include <cassert>
 #include <iostream>
 
 int main(int /*argc*/, char* /*argv*/[])
@@ -22,7 +21,6 @@ int main(int /*argc*/, char* /*argv*/[])
             std::cout << "UNKNOWN " << token.value << '\n';
         token = skel::scan(std::cin);
     }
-    assert(token.type == skel::token::EOS);
     std::cout << "EOS\n";
     return 0;
 }
