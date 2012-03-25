@@ -1,14 +1,7 @@
 include $(ROOTDIR)/src/common.mk
 
-LDFLAGS += -lboost_program_options \
-           -lboost_filesystem \
-           -lboost_system \
-		   -ltemplog
-OBJ = $(CURDIR)/main.o \
-      $(CURDIR)/list_skeletons.o \
-      $(CURDIR)/personalize_skeleton.o \
-      $(CURDIR)/load_substitutions_map.o \
-      $(CURDIR)/skeleton.o
+LDFLAGS += -ltemplog
+OBJ = $(CURDIR)/main.o
 DEPS = $(OBJ:.o=.d)
 
 .PHONY: all clean distclean install uninstall
