@@ -24,11 +24,13 @@ void scan_force(std::istream& in)
     } else if( c == '{' ) {
         tokens_queue.push(skel::token(skel::token::MACRO_BEGIN));
         std::string macro;
-        while( in.get(c) && c != '}' )
+        while( in.get(c) && c != '\n' && c != '}' )
             macro += c;
         tokens_queue.push(skel::token(skel::token::MACRO, macro));
         if( ! in )
             tokens_queue.push(skel::token(skel::token::EOS));
+        else if( c == '\n' )
+            throw skel::syntax_error("unexpected newline; expected MACRO_END");
         else
             tokens_queue.push(skel::token(skel::token::MACRO_END));
     } else {
