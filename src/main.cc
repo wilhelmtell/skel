@@ -9,6 +9,10 @@ int main(int /*argc*/, char* /*argv*/[])
         {"APPNAME", "skel"},
         {"VERSION", "0.1"}
     };
-    skel::parse(std::cin, std::cout, substitutions);
+    try {
+        skel::parse(std::cin, std::cout, substitutions);
+    } catch( skel::syntax_error const& e) {
+        std::cerr << "syntax error: " << e.what() << '\n';
+    }
     return 0;
 }
