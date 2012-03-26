@@ -32,7 +32,10 @@ void parse_macro_name(std::istream& in, std::ostream& out,
 {
     skel::token t = skel::scan(in);
     auto const pos = substitutions.find(t.value);
-    out << (pos == substitutions.end() ? t.value : pos->second);
+    if( pos == substitutions.end() )
+        out << '{' << t.value << '}';
+    else
+        out << pos->second;
 }
 
 void parse_macro(std::istream& in, std::ostream& out,
