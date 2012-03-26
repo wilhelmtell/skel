@@ -1,6 +1,6 @@
 #include "parser.hh"
 #include "scanner.hh"
-#include <iosfwd>
+#include <iostream>
 #include <map>
 #include <string>
 
