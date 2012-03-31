@@ -1,7 +1,9 @@
 include $(ROOTDIR)/src/common.mk
 
-LDFLAGS += -ltemplog
+LDFLAGS += -ltemplog \
+           -lboost_program_options
 OBJ = $(CURDIR)/main.o \
+      $(CURDIR)/mapping.o \
       $(CURDIR)/scanner.o \
       $(CURDIR)/parser.o
 DEPS = $(OBJ:.o=.d)
