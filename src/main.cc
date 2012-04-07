@@ -43,17 +43,17 @@ int main(int argc, char* argv[])
         return 1;
     } catch( skel::syntax_error const& e ) {
         std::cerr << "skeleton syntax error.\n";
-        return 1;
+        return 2;
     // i can't see how any of the following exceptions will propagate, but i
     // don't trust myself here.
     } catch( std::runtime_error const& e ) {
         unknown_error(e);
-        return 1;
+        return 3;
     } catch( std::logic_error const& e ) {
         unknown_error(e);
-        return 1;
+        return 4;
     } catch( ... ) {
         unknown_error();
-        return 1;
+        return 5;
     }
 }
