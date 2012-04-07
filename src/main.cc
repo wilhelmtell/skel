@@ -1,7 +1,6 @@
 #include "application.hh"
 #include <iostream>
 #include "parser.hh"
-#include "mapping.hh"
 #include <boost/program_options/errors.hpp>
 
 namespace {
