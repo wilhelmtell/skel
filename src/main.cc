@@ -5,7 +5,8 @@
 #include <boost/program_options.hpp>
 #include "mapping.hh"
 #include <vector>
-#include "program_options.hh"
+#include <algorithm>
+#include <utility>
 
 namespace po = boost::program_options;
 
@@ -41,6 +42,12 @@ int main(int argc, char* argv[])
             return 0;
         }
         std::map<std::string,std::string> substitutions;
+        auto maps_from_cmdline = vm["map"].as<std::vector<skel::mapping>>();
+        std::transform(maps_from_cmdline.begin(), maps_from_cmdline.end(),
+                       std::inserter(substitutions, substitutions.end()),
+                       [&](skel::mapping const& m) {
+                           return std::make_pair(m.from, m.to);
+                       });
         skel::parse(std::cin, std::cout, substitutions);
     } catch( skel::syntax_error const& e ) {
         std::cerr << "skeleton syntax error.\n";

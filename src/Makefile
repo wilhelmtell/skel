@@ -1,6 +1,7 @@
 include $(ROOTDIR)/src/common.mk
 
 LDFLAGS += -ltemplog \
+           -lboost_regex \
            -lboost_program_options
 OBJ = $(CURDIR)/main.o \
       $(CURDIR)/mapping.o \

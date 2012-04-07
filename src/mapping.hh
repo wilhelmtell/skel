@@ -3,15 +3,20 @@
 
 #include <string>
 #include <iosfwd>
+#include <vector>
+
+namespace boost { struct any; }
 
 namespace skel {
 struct mapping {
+    mapping(std::string const& from, std::string const& to);
     std::string from;
     std::string to;
 };
 
-std::istream& operator>>(std::istream& in, mapping& m);
-std::ostream& operator<<(std::ostream& out, mapping const& m);
+void validate(boost::any& v,
+              std::vector<std::string> const& values,
+              mapping*, int);
 }  // namespace skel
 
 #endif  // MAPPING_HH_
