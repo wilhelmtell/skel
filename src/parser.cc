@@ -3,6 +3,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "parser_error.hh"
 
 namespace {
 void parse_terminal(std::istream& in, std::ostream& out)
