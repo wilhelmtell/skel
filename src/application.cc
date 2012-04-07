@@ -19,6 +19,13 @@ bool print_help(po::options_description const& desc, po::variables_map const&)
     return std::cout << usage << "\n\n" << desc;
 }
 
+bool help_and_other_options(po::options_description const& desc,
+                            po::variables_map const& conf)
+{
+    std::cout << "Help requested; doing nothing other than help.\n\n";
+    return print_help(desc, conf);
+}
+
 bool substitute(po::options_description const&, po::variables_map const& conf)
 {
     std::map<std::string,std::string> substitutions;
@@ -36,6 +43,7 @@ bool substitute(po::options_description const&, po::variables_map const& conf)
 namespace skel {
 application::application(int argc, char *argv[])
 : desc("Options")
+, exec_func(0)
 {
     desc.add_options()
         ("help", "display this help message")
@@ -51,7 +59,10 @@ application::application(int argc, char *argv[])
                   .positional(positional)
                   .run(), conf);
         po::notify(conf);
-        exec_func = substitute;
+        if( conf.count("help") )
+            exec_func = help_and_other_options;
+        else
+            exec_func = substitute;
     } catch( po::required_option const& e ) {
         if( conf.count("help") )
             exec_func = print_help;
