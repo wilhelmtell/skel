@@ -4,6 +4,36 @@
 #include "mapping.hh"
 #include <boost/program_options/errors.hpp>
 
+namespace {
+std::string unknown_error_message()
+{
+    return
+        "will you be so kind and send me an email with step-by-step\n"
+        "instructions on how to reproduce this error? i'd love to fix it, but\n"
+        "i need to know about it first. my email address is\n"
+        "matan.nassau@gmail.com.\n";
+}
+
+void unknown_error(std::runtime_error const& e)
+{
+    std::cerr
+        << "unknown runtime error: " << e.what() << "\n\n"
+        << unknown_error_message();
+}
+
+void unknown_error(std::logic_error const& e)
+{
+    std::cerr
+        << "unknown logic error: " << e.what() << "\n\n"
+        << unknown_error_message();
+}
+
+void unknown_error()
+{
+    std::cerr << "unknown error\n\n" << unknown_error_message();
+}
+}
+
 int main(int argc, char* argv[])
 {
     try {
@@ -18,16 +48,13 @@ int main(int argc, char* argv[])
     // i can't see how any of the following exceptions will propagate, but i
     // don't trust myself here.
     } catch( std::runtime_error const& e ) {
-        std::cerr << "runtime error: " << e.what() << '\n';
+        unknown_error(e);
         return 1;
     } catch( std::logic_error const& e ) {
-        std::cerr << "logic error: " << e.what() << '\n';
+        unknown_error(e);
         return 1;
     } catch( ... ) {
-        std::cerr << "unknown error. will you be so kind and send me an email "
-            "with step-by-step instructions on how to reproduce this error? "
-            "i'd love to fix it, but i need to know about it first. my email "
-            "address is matan.nassau@gmail.com.\n";
+        unknown_error();
         return 1;
     }
 }
