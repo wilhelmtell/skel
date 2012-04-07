@@ -4,6 +4,7 @@ LDFLAGS += -ltemplog \
            -lboost_regex \
            -lboost_program_options
 OBJ = $(CURDIR)/main.o \
+      $(CURDIR)/application.o \
       $(CURDIR)/mapping.o \
       $(CURDIR)/scanner.o \
       $(CURDIR)/parser.o
