@@ -29,7 +29,7 @@ bool help_and_other_options(po::options_description const& desc,
 bool substitute(po::options_description const&, po::variables_map const& conf)
 {
     std::map<std::string,std::string> substitutions;
-    auto maps_from_cmdline = conf["map"].as<std::vector<skel::mapping>>();
+    auto maps_from_cmdline = conf["substitute"].as<std::vector<skel::mapping>>();
     std::transform(maps_from_cmdline.begin(), maps_from_cmdline.end(),
                    std::inserter(substitutions, substitutions.end()),
                    [&](skel::mapping const& m) {
@@ -47,7 +47,7 @@ application::application(int argc, char *argv[])
 {
     desc.add_options()
         ("help", "display this help message")
-        ("map", po::value<std::vector<skel::mapping>>(), "define a substitution mapping")
+        ("substitute", po::value<std::vector<skel::mapping>>(), "define a substitution mapping")
         ("skeleton",
          po::value<std::string>()->required(),
          "pick skeleton to instantiate");
