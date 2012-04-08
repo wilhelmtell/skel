@@ -38,8 +38,7 @@ bool exec(po::options_description const&, po::variables_map const& conf)
                    });
     std::ostringstream out;
     skel::parse(std::cin, out, substitutions);
-    std::cout << out.str();
-    return true;
+    return std::cout << out.str();
 }
 }
 
