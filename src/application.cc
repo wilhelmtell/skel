@@ -9,6 +9,7 @@
 #include <iterator>
 #include <utility>
 #include <iostream>
+#include <sstream>
 
 namespace po = boost::program_options;
 
@@ -35,7 +36,9 @@ bool exec(po::options_description const&, po::variables_map const& conf)
                    [&](skel::mapping const& m) {
                        return std::make_pair(m.from, m.to);
                    });
-    skel::parse(std::cin, std::cout, substitutions);
+    std::ostringstream out;
+    skel::parse(std::cin, out, substitutions);
+    std::cout << out.str();
     return true;
 }
 }
