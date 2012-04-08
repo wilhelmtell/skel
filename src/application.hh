@@ -3,6 +3,7 @@
 
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/options_description.hpp>
+#include <boost/function.hpp>
 
 namespace skel {
 struct application {
@@ -13,8 +14,9 @@ struct application {
 private:
     boost::program_options::options_description desc;
     boost::program_options::variables_map conf;
-    bool (*exec_func)(boost::program_options::options_description const&,
-                      boost::program_options::variables_map const&);
+    boost::function<bool (boost::program_options::options_description const&,
+                          boost::program_options::variables_map const&)>
+                    exec_func;
 };
 }  // namespace skel
 

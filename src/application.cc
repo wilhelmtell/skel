@@ -26,7 +26,7 @@ bool help_and_other_options(po::options_description const& desc,
     return print_help(desc, conf);
 }
 
-bool substitute(po::options_description const&, po::variables_map const& conf)
+bool exec(po::options_description const&, po::variables_map const& conf)
 {
     std::map<std::string,std::string> substitutions;
     auto maps_from_cmdline = conf["substitute"].as<std::vector<skel::mapping>>();
@@ -62,7 +62,7 @@ application::application(int argc, char *argv[])
         if( conf.count("help") )
             exec_func = help_and_other_options;
         else
-            exec_func = substitute;
+            exec_func = ::exec;
     } catch( po::required_option const& e ) {
         if( conf.count("help") )
             exec_func = print_help;
@@ -72,6 +72,6 @@ application::application(int argc, char *argv[])
 }
 
 bool application::exec() const {
-    return (*exec_func)(desc, conf);
+    return exec_func(desc, conf);
 }
 }  // namespace skel
