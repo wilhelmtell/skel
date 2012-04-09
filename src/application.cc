@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 #include "print_message.hh"
-#include "expand_macros.hh"
 #include "instantiate_skeleton.hh"
 #include "rename_files.hh"
 #include "memory.hh"
@@ -14,6 +13,7 @@
 #include <iterator>
 #include <utility>
 #include <map>
+#include <iostream>
 
 namespace po = boost::program_options;
 
@@ -28,18 +28,18 @@ create_commands(po::options_description const& desc, po::variables_map const& co
         commands.push_back(mn::make_unique<skel::print_message>(ss.str()));
     }
     if( conf.count("skeleton") ) {
-        auto const skeleton = conf["skeleton"].as<std::string>();
-        commands.push_back(mn::make_unique<skel::instantiate_skeleton>(skeleton));
-    }
-    if( conf.count("substitute") ) {
         auto const maps_from_cmdline = conf["substitute"].as<std::vector<skel::mapping>>();
+        if( ! conf.count("substitute") )
+           std::cerr << "no substitutions\n";
         std::map<std::string,std::string> substitutions;
         std::transform(maps_from_cmdline.begin(), maps_from_cmdline.end(),
                        std::inserter(substitutions, substitutions.end()),
                        [&](skel::mapping const& m) {
                            return std::make_pair(m.from, m.to);
                        });
-        commands.push_back(mn::make_unique<skel::expand_macros>(substitutions));
+        auto const skeleton = conf["skeleton"].as<std::string>();
+        commands.push_back(mn::make_unique<skel::instantiate_skeleton>(skeleton,
+                                                                       substitutions));
     }
     if( conf.count("mv") ) {
         auto const maps_from_cmdline = conf["mv"].as<std::vector<skel::mapping>>();

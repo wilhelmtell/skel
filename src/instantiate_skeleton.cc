@@ -7,6 +7,11 @@
 #include <functional>
 #include <stack>
 #include <numeric>
+#include <sstream>
+#include <fstream>
+#include "parser.hh"
+#include "instantiate_skeleton_error.hh"
+#include <map>
 
 namespace fs = boost::filesystem3;
 
@@ -55,7 +60,8 @@ copy_part::~copy_part()
 
 
 struct instantiate_part {
-    instantiate_part(fs::path const& from, fs::path const& to);
+    instantiate_part(fs::path const& from, fs::path const& to,
+                     std::map<std::string,std::string> const& mappings);
 
     void commit();
 
@@ -63,9 +69,14 @@ private:
     copy_part cp;
 };
 
-instantiate_part::instantiate_part(fs::path const& from, fs::path const& to)
+instantiate_part::instantiate_part(fs::path const& from, fs::path const& to,
+                                   std::map<std::string,std::string> const& mappings)
 : cp(from, to)
 {
+    std::ostringstream buf;
+    std::ifstream in(from.string());
+    skel::parse(in, buf, mappings);
+    std::ofstream(to.string()) << buf.str();
 }
 
 void instantiate_part::commit()
@@ -116,7 +127,8 @@ void instantiate_parts::add(instantiate_part p)
     parts.push(std::move(p));
 }
 
-void copy_r(fs::path const& from, fs::path const& to)
+void copy_r(fs::path const& from, fs::path const& to,
+            std::map<std::string,std::string> const& mappings)
 {
     auto const from_parent = from.parent_path();
     auto const parent_path_length = std::distance(from_parent.begin(),
@@ -130,15 +142,17 @@ void copy_r(fs::path const& from, fs::path const& to)
                                             parent_path_length + 1);
         auto const current_to = std::accumulate(relative_pos, current.end(),
                                                 to, std::divides<fs::path>());
-        parts.add(instantiate_part(current, current_to));
+        parts.add(instantiate_part(current, current_to, mappings));
     });
     parts.commit();
 }
 }
 
 namespace skel {
-instantiate_skeleton::instantiate_skeleton(std::string const& name)
+instantiate_skeleton::instantiate_skeleton(std::string const& name,
+                                           std::map<std::string,std::string> const& mappings)
 : name(name)
+, mappings(mappings)
 {
 }
 
@@ -147,6 +161,7 @@ void instantiate_skeleton::operator()() const
     char const * const HOME = std::getenv("HOME");
     char const * const RC_DIR = ".skel";
     char const * const SKELETON_DIR = "skeleton";
-    copy_r(fs::path(HOME) / RC_DIR / name / SKELETON_DIR, fs::current_path());
+    copy_r(fs::path(HOME) / RC_DIR / name / SKELETON_DIR, fs::current_path(),
+           mappings);
 }
 }  // namespace skel
