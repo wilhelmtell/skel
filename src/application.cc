@@ -6,6 +6,7 @@
 #include <string>
 #include "print_message.hh"
 #include "expand_macros.hh"
+#include "instantiate_skeleton.hh"
 #include "memory.hh"
 #include "mapping.hh"
 #include <algorithm>
@@ -25,8 +26,12 @@ create_commands(po::options_description const& desc, po::variables_map const& co
         ss << " Usage: skel [options] [--skeleton=]<skeleton>\n\n" << desc;
         commands.push_back(mn::make_unique<skel::print_message>(ss.str()));
     }
+    if( conf.count("skeleton") ) {
+        auto const skeleton = conf["skeleton"].as<std::string>();
+        commands.push_back(mn::make_unique<skel::instantiate_skeleton>(skeleton));
+    }
     if( conf.count("substitute") ) {
-        auto maps_from_cmdline = conf["substitute"].as<std::vector<skel::mapping>>();
+        auto const maps_from_cmdline = conf["substitute"].as<std::vector<skel::mapping>>();
         std::map<std::string,std::string> substitutions;
         std::transform(maps_from_cmdline.begin(), maps_from_cmdline.end(),
                        std::inserter(substitutions, substitutions.end()),

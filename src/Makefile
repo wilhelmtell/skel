@@ -1,12 +1,14 @@
 include $(ROOTDIR)/src/common.mk
 
-LDFLAGS += -ltemplog \
-           -lboost_regex \
+LDFLAGS += -lboost_regex \
+           -lboost_filesystem \
+           -lboost_system \
            -lboost_program_options
 OBJ = $(CURDIR)/main.o \
       $(CURDIR)/application.o \
       $(CURDIR)/expand_macros.o \
       $(CURDIR)/print_message.o \
+	  $(CURDIR)/instantiate_skeleton.o \
       $(CURDIR)/mapping.o \
       $(CURDIR)/scanner.o \
       $(CURDIR)/parser.o
