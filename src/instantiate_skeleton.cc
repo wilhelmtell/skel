@@ -73,10 +73,12 @@ instantiate_part::instantiate_part(fs::path const& from, fs::path const& to,
                                    std::map<std::string,std::string> const& mappings)
 : cp(from, to)
 {
-    std::ostringstream buf;
-    std::ifstream in(from.string());
-    skel::parse(in, buf, mappings);
-    std::ofstream(to.string()) << buf.str();
+    if( fs::is_regular_file(from) ) {
+        std::ostringstream buf;
+        std::ifstream in(from.string());
+        skel::parse(in, buf, mappings);
+        std::ofstream(to.string()) << buf.str();
+    }
 }
 
 void instantiate_part::commit()
