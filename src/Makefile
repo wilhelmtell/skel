@@ -5,6 +5,8 @@ LDFLAGS += -ltemplog \
            -lboost_program_options
 OBJ = $(CURDIR)/main.o \
       $(CURDIR)/application.o \
+      $(CURDIR)/expand_macros.o \
+      $(CURDIR)/print_message.o \
       $(CURDIR)/mapping.o \
       $(CURDIR)/scanner.o \
       $(CURDIR)/parser.o

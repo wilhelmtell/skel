@@ -1,22 +1,18 @@
 #ifndef APPLICATION_HH_
 #define APPLICATION_HH_
 
-#include <boost/program_options/variables_map.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/function.hpp>
+#include <vector>
+#include "command.hh"
+#include <memory>
 
 namespace skel {
 struct application {
     application(int argc, char *argv[]);
 
-    bool exec() const;
+    void exec() const;
 
 private:
-    boost::program_options::options_description desc;
-    boost::program_options::variables_map conf;
-    boost::function<bool (boost::program_options::options_description const&,
-                          boost::program_options::variables_map const&)>
-                    exec_func;
+    std::vector<std::unique_ptr<command>> commands;
 };
 }  // namespace skel
 

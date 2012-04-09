@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 {
     try {
         skel::application app(argc, argv);
-        return ! app.exec();
+        app.exec();
     } catch( boost::program_options::required_option const& e ) {
         std::cerr << "please specify a skeleton to instantiate.\n";
         return 1;
@@ -56,4 +56,5 @@ int main(int argc, char* argv[])
         unknown_error();
         return 5;
     }
+    return 0;
 }
