@@ -1,6 +1,7 @@
 #include "application.hh"
 #include <iostream>
 #include "parser_error.hh"
+#include "rename_files_error.hh"
 #include <boost/program_options/errors.hpp>
 
 #ifndef NDEBUG
@@ -43,18 +44,31 @@ int main(int argc, char* argv[])
         app.exec();
     } catch( boost::program_options::required_option const& e ) {
         std::cerr << "please specify a skeleton to instantiate.\n";
-        return 1;
+        return 0x7fff;
     } catch( skel::syntax_error const& e ) {
         std::cerr << "skeleton syntax error: " << e.what() << '\n';
-        return 2;
-    // i can't see how any of the following exceptions will propagate, but i
-    // don't trust myself here.
+        return 0x7ffe;
+    } catch( skel::rename_files_error const& e ) {
+        std::cerr << "rename error: " << e.what() << '\n';
+        return 0x7ffd;
     } catch( std::runtime_error const& e ) {
         unknown_error(e);
+#ifndef NDEBUG
+        void * stacktrace[128];
+        std::size_t size = backtrace(stacktrace, 128);
+        backtrace_symbols_fd(stacktrace, size, 2);
+        throw;
+#endif
         return 3;
     } catch( std::logic_error const& e ) {
         unknown_error(e);
-        return 4;
+#ifndef NDEBUG
+        void * stacktrace[128];
+        std::size_t size = backtrace(stacktrace, 128);
+        backtrace_symbols_fd(stacktrace, size, 2);
+        throw;
+#endif
+        return 2;
     } catch( ... ) {
         unknown_error();
 #ifndef NDEBUG
@@ -63,7 +77,7 @@ int main(int argc, char* argv[])
         backtrace_symbols_fd(stacktrace, size, 2);
         throw;
 #endif
-        return 5;
+        return 1;
     }
     return 0;
 }

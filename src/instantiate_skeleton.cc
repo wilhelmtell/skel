@@ -10,7 +10,6 @@
 #include <sstream>
 #include <fstream>
 #include "parser.hh"
-#include "instantiate_skeleton_error.hh"
 #include <map>
 
 namespace fs = boost::filesystem3;
