@@ -68,9 +68,8 @@ void parse(std::istream& in, std::ostream& out,
             parse_esc(in, out);
         } else if( t.type == token::MACRO_BEGIN ) {
             parse_macro(in, out, substitutions);
-        } else if( t.type == token::EOS ) {
-            parse_eos(in);
         }
     }
+    parse_eos(in);
 }
 }  // namespace skel
