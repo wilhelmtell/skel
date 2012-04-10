@@ -3,6 +3,10 @@
 #include "parser_error.hh"
 #include <boost/program_options/errors.hpp>
 
+#ifndef NDEBUG
+#include <execinfo.h>
+#endif
+
 namespace {
 std::string unknown_error_message()
 {
@@ -54,6 +58,12 @@ int main(int argc, char* argv[])
         return 4;
     } catch( ... ) {
         unknown_error();
+#ifndef NDEBUG
+        void * stacktrace[128];
+        std::size_t size = backtrace(stacktrace, 128);
+        backtrace_symbols_fd(stacktrace, size, 2);
+        throw;
+#endif
         return 5;
     }
     return 0;
