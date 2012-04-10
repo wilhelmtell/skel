@@ -58,14 +58,14 @@ std::vector<std::unique_ptr<skel::command>> parse_commandline(int argc, char * a
 {
     po::options_description desc("Options");
     desc.add_options()
-        ("help", "display this help message")
-        ("substitute",
+        ("help,h", "display this help message")
+        ("substitute,s",
          po::value<std::vector<skel::mapping>>(),
          "define a substitution mapping")
-        ("rename",
+        ("rename,r",
          po::value<std::vector<skel::mapping>>(),
          "define a rename mapping")
-        ("skeleton", po::value<std::string>(), "pick skeleton to instantiate");
+        ("skeleton,k", po::value<std::string>(), "pick skeleton to instantiate");
     po::positional_options_description positional;
     positional.add("skeleton", -1);
     po::variables_map conf;
