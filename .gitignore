@@ -1,5 +1,5 @@
 .*.sw[op]
 *.o
-*.d
+*.dep
 gmon.out
 src/skel

@@ -12,7 +12,7 @@ OBJ = $(CURDIR)/main.o \
       $(CURDIR)/mapping.o \
       $(CURDIR)/scanner.o \
       $(CURDIR)/parser.o
-DEPS = $(OBJ:.o=.d)
+DEPS = $(OBJ:.o=.dep)
 
 .PHONY: all clean distclean install uninstall
 
@@ -27,7 +27,7 @@ distclean: clean
 skel: $(OBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
-%.d: %.cc
+%.dep: %.cc
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(<:.cc=.o)" "$<"
 
 ifneq "$(MAKECMDGOALS)" "clean"
