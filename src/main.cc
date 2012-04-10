@@ -5,12 +5,20 @@
 #include <boost/program_options/errors.hpp>
 
 #ifndef NDEBUG
-#include <execinfo.h>
+#  include <execinfo.h>
+#  define DEBUG_THROW throw
+#else
+#  define DEBUG_THROW
 #endif
 
 namespace {
 std::string unknown_error_message()
 {
+#ifndef NDEBUG
+    void * data[128];
+    std::size_t size = backtrace(data, 128);
+    backtrace_symbols_fd(data, size, 2);
+#endif
     return
         "will you be so kind and send me an email to matan.nassau@gmail.com\n"
         "with step-by-step instructions on how to reproduce this error? i'd\n"
@@ -53,30 +61,15 @@ int main(int argc, char* argv[])
         return 0x7ffd;
     } catch( std::runtime_error const& e ) {
         unknown_error(e);
-#ifndef NDEBUG
-        void * stacktrace[128];
-        std::size_t size = backtrace(stacktrace, 128);
-        backtrace_symbols_fd(stacktrace, size, 2);
-        throw;
-#endif
+        DEBUG_THROW;
         return 3;
     } catch( std::logic_error const& e ) {
         unknown_error(e);
-#ifndef NDEBUG
-        void * stacktrace[128];
-        std::size_t size = backtrace(stacktrace, 128);
-        backtrace_symbols_fd(stacktrace, size, 2);
-        throw;
-#endif
+        DEBUG_THROW;
         return 2;
     } catch( ... ) {
         unknown_error();
-#ifndef NDEBUG
-        void * stacktrace[128];
-        std::size_t size = backtrace(stacktrace, 128);
-        backtrace_symbols_fd(stacktrace, size, 2);
-        throw;
-#endif
+        DEBUG_THROW;
         return 1;
     }
     return 0;
