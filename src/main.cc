@@ -11,10 +11,9 @@ namespace {
 std::string unknown_error_message()
 {
     return
-        "will you be so kind and send me an email with step-by-step\n"
-        "instructions on how to reproduce this error? i'd love to fix it, but\n"
-        "i need to know about it first. my email address is\n"
-        "matan.nassau@gmail.com.\n";
+        "will you be so kind and send me an email to matan.nassau@gmail.com\n"
+        "with step-by-step instructions on how to reproduce this error? i'd\n"
+        "love to fix it, but i need to know about it first.\n";
 }
 
 void unknown_error(std::runtime_error const& e)
