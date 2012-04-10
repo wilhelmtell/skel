@@ -41,8 +41,8 @@ create_commands(po::options_description const& desc, po::variables_map const& co
         commands.push_back(mn::make_unique<skel::instantiate_skeleton>(skeleton,
                                                                        substitutions));
     }
-    if( conf.count("mv") ) {
-        auto const maps_from_cmdline = conf["mv"].as<std::vector<skel::mapping>>();
+    if( conf.count("rename") ) {
+        auto const maps_from_cmdline = conf["rename"].as<std::vector<skel::mapping>>();
         std::map<std::string,std::string> renames;
         std::transform(maps_from_cmdline.begin(), maps_from_cmdline.end(),
                        std::inserter(renames, renames.end()),
@@ -62,7 +62,7 @@ std::vector<std::unique_ptr<skel::command>> parse_commandline(int argc, char * a
         ("substitute",
          po::value<std::vector<skel::mapping>>(),
          "define a substitution mapping")
-        ("mv",
+        ("rename",
          po::value<std::vector<skel::mapping>>(),
          "define a rename mapping")
         ("skeleton", po::value<std::string>(), "pick skeleton to instantiate");
