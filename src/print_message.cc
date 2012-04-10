@@ -7,7 +7,7 @@ print_message::print_message(std::string const& msg)
 {
 }
 
-void print_message::operator()() const
+void print_message::execute() const
 {
     std::cout << msg;
 }

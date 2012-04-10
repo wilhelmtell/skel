@@ -9,7 +9,7 @@ namespace skel {
 struct rename_files : public command {
     rename_files(std::map<std::string,std::string> const& mappings);
 
-    void operator()() const;
+    void execute() const;
 
 private:
     std::map<std::string,std::string> mappings;

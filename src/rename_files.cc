@@ -96,7 +96,7 @@ rename_files::rename_files(std::map<std::string,std::string> const& mappings)
 {
 }
 
-void rename_files::operator()() const
+void rename_files::execute() const
 {
     renames_atom renames;
     std::for_each(fs::recursive_directory_iterator(fs::current_path()),

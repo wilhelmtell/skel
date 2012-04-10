@@ -84,6 +84,6 @@ application::application(int argc, char *argv[])
 
 void application::exec() const {
     for( auto const& c : commands )
-        (*c)();
+        c->execute();
 }
 }  // namespace skel

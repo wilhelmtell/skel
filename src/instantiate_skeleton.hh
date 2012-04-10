@@ -10,7 +10,7 @@ struct instantiate_skeleton : public command {
     instantiate_skeleton(std::string const& name,
                          std::map<std::string,std::string> const& mappings);
 
-    void operator()() const;
+    void execute() const;
 
 private:
     std::string const name;

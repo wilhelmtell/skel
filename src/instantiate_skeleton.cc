@@ -157,7 +157,7 @@ instantiate_skeleton::instantiate_skeleton(std::string const& name,
 {
 }
 
-void instantiate_skeleton::operator()() const
+void instantiate_skeleton::execute() const
 {
     char const * const HOME = std::getenv("HOME");
     char const * const RC_DIR = ".skel";
