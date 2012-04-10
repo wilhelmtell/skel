@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         std::cerr << "please specify a skeleton to instantiate.\n";
         return 1;
     } catch( skel::syntax_error const& e ) {
-        std::cerr << "skeleton syntax error.\n";
+        std::cerr << "skeleton syntax error: " << e.what() << '\n';
         return 2;
     // i can't see how any of the following exceptions will propagate, but i
     // don't trust myself here.
