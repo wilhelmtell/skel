@@ -1,6 +1,5 @@
 #include "application.hh"
 #include <vector>
-#include <memory>
 #include <boost/program_options.hpp>
 #include <sstream>
 #include <string>
@@ -10,21 +9,21 @@
 #include "memory.hh"
 #include "mapping.hh"
 #include <algorithm>
-#include <iterator>
 #include <utility>
 #include <map>
+#include "session.hh"
 
 namespace po = boost::program_options;
 
 namespace {
-std::vector<std::unique_ptr<skel::command>>
-create_commands(po::options_description const& desc, po::variables_map const& conf)
+skel::session
+create_session(po::options_description const& desc, po::variables_map const& conf)
 {
-    std::vector<std::unique_ptr<skel::command>> commands;
+    skel::session work;
     if( conf.count("help") ) {
         std::ostringstream ss;
         ss << " Usage: skel [options] [--skeleton=]<skeleton>\n\n" << desc;
-        commands.push_back(mn::make_unique<skel::print_message>(ss.str()));
+        work.add(mn::make_unique<skel::print_message>(ss.str()));
     }
     if( conf.count("skeleton") ) {
         std::map<std::string,std::string> subs;
@@ -37,7 +36,7 @@ create_commands(po::options_description const& desc, po::variables_map const& co
                            });
         }
         auto const skeleton_name = conf["skeleton"].as<std::string>();
-        commands.push_back(mn::make_unique<skel::instantiate_skeleton>(skeleton_name, subs));
+        work.add(mn::make_unique<skel::instantiate_skeleton>(skeleton_name, subs));
     }
     if( conf.count("rename") ) {
         auto const maps_from_cmdline = conf["rename"].as<std::vector<skel::mapping>>();
@@ -47,12 +46,12 @@ create_commands(po::options_description const& desc, po::variables_map const& co
                        [&](skel::mapping const& m) {
                            return std::make_pair(m.from, m.to);
                        });
-        commands.push_back(mn::make_unique<skel::rename_files>(renames));
+        work.add(mn::make_unique<skel::rename_files>(renames));
     }
-    return commands;
+    return work;
 }
 
-std::vector<std::unique_ptr<skel::command>> parse_commandline(int argc, char * argv[])
+skel::session parse_commandline(int argc, char * argv[])
 {
     po::options_description desc("Options");
     desc.add_options()
@@ -72,18 +71,18 @@ std::vector<std::unique_ptr<skel::command>> parse_commandline(int argc, char * a
               .positional(positional)
               .run(), conf);
     po::notify(conf);
-    return create_commands(desc, conf);
+    return create_session(desc, conf);
 }
 }
 
 namespace skel {
 application::application(int argc, char *argv[])
-: commands(parse_commandline(argc, argv))
+: work(parse_commandline(argc, argv))
 {
 }
 
-void application::exec() const {
-    for( auto const& c : commands )
-        c->execute();
+void application::exec()
+{
+    work.exec();
 }
 }  // namespace skel

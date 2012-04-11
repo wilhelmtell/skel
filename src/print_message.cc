@@ -7,7 +7,11 @@ print_message::print_message(std::string const& msg)
 {
 }
 
-void print_message::execute() const
+void print_message::execute()
+{
+}
+
+void print_message::commit()
 {
     std::cout << msg;
 }

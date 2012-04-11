@@ -5,7 +5,8 @@ namespace skel {
 struct command {
     virtual ~command() = default;
 
-    virtual void execute() const = 0;
+    virtual void execute() = 0;
+    virtual void commit() = 0;
 };
 }  // namespace skel
 

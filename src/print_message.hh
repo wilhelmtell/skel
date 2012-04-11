@@ -8,7 +8,8 @@ namespace skel {
 struct print_message : public command {
     print_message(std::string const& msg);
 
-    void execute() const;
+    void execute();
+    void commit();
 
 private:
     std::string const msg;

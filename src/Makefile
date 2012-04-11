@@ -6,6 +6,12 @@ LDFLAGS += -lboost_regex \
            -lboost_program_options
 OBJ = $(CURDIR)/main.o \
       $(CURDIR)/application.o \
+      $(CURDIR)/session.o \
+      $(CURDIR)/copy_part.o \
+      $(CURDIR)/instantiate_part.o \
+      $(CURDIR)/instantiate_parts.o \
+      $(CURDIR)/mv.o \
+      $(CURDIR)/renames_atom.o \
       $(CURDIR)/rename_files.o \
       $(CURDIR)/print_message.o \
 	  $(CURDIR)/instantiate_skeleton.o \

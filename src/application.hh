@@ -1,18 +1,17 @@
 #ifndef APPLICATION_HH_
 #define APPLICATION_HH_
 
-#include <vector>
+#include "session.hh"
 #include "command.hh"
-#include <memory>
 
 namespace skel {
 struct application {
     application(int argc, char *argv[]);
 
-    void exec() const;
+    void exec();
 
 private:
-    std::vector<std::unique_ptr<command>> commands;
+    session work;
 };
 }  // namespace skel
 
