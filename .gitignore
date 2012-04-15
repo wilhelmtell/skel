@@ -3,3 +3,4 @@
 *.dep
 gmon.out
 src/skel
+test/test_skel

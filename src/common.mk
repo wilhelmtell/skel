@@ -29,4 +29,5 @@ endif
 CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic -Werror
 
 CPPFLAGS += $(foreach MACRO,$(MACROS),-D$(MACRO)) \
+            -isystem$(ROOTDIR)/lib/include \
             -I$(ROOTDIR)/include
