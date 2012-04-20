@@ -6,7 +6,7 @@
 
 namespace skel {
 struct application {
-    application(int argc, char *argv[]);
+    application(int argc, char const * argv[]);
 
     void exec();
 

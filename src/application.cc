@@ -51,7 +51,7 @@ create_session(po::options_description const& desc, po::variables_map const& con
     return work;
 }
 
-skel::session parse_commandline(int argc, char * argv[])
+skel::session parse_commandline(int argc, char const * argv[])
 {
     po::options_description desc("Options");
     desc.add_options()
@@ -76,7 +76,7 @@ skel::session parse_commandline(int argc, char * argv[])
 }
 
 namespace skel {
-application::application(int argc, char *argv[])
+application::application(int argc, char const * argv[])
 : work(parse_commandline(argc, argv))
 {
 }
