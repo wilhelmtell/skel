@@ -45,7 +45,7 @@ void unknown_error()
 }
 }
 
-int main(int argc, char const * argv[])
+int main(int argc, char const * const argv[])
 {
     try {
         skel::application app(argc, argv);
