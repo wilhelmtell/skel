@@ -3,6 +3,7 @@
 #include "parser_error.hh"
 #include "rename_files_error.hh"
 #include <boost/program_options/errors.hpp>
+#include "invalid_user_interface_input.hh"
 
 #ifndef NDEBUG
 #  include <execinfo.h>
@@ -38,8 +39,8 @@ int main(int argc, char const * const argv[])
     try {
         skel::application app(argc, argv);
         app.exec();
-    } catch( boost::program_options::required_option const& e ) {
-        std::cerr << "please specify a skeleton to instantiate.\n";
+    } catch( skel::invalid_user_interface_input const& e ) {
+        std::cerr << "invalid user interface input.\n";
         return 0x7fff;
     } catch( skel::syntax_error const& e ) {
         std::cerr << "skeleton syntax error: " << e.what() << '\n';

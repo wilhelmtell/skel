@@ -12,6 +12,7 @@
 #include <utility>
 #include <map>
 #include "session.hh"
+#include "invalid_user_interface_input.hh"
 
 namespace po = boost::program_options;
 
@@ -53,27 +54,33 @@ create_session(po::options_description const& desc, po::variables_map const& con
 
 skel::session parse_commandline(int argc, char const * const argv[])
 {
-    po::options_description desc("Options");
-    desc.add_options()
-        ("help,h", "display this help message")
-        ("substitute,s",
-         po::value<std::vector<skel::mapping>>(),
-         "define a substitution mapping")
-        ("rename,r",
-         po::value<std::vector<skel::mapping>>(),
-         "define a rename mapping")
-        ("skeleton,k", po::value<std::string>(), "pick skeleton to instantiate");
-    po::positional_options_description positional;
-    positional.add("skeleton", -1);
-    po::variables_map conf;
-    po::store(po::command_line_parser(argc, argv)
-              .options(desc)
-              .positional(positional)
-              .run(), conf);
-    po::notify(conf);
-    return create_session(desc, conf);
+    try {
+        po::options_description desc("Options");
+        desc.add_options()
+            ("help,h", "display this help message")
+            ("substitute,s",
+             po::value<std::vector<skel::mapping>>(),
+             "define a substitution mapping")
+            ("rename,r",
+             po::value<std::vector<skel::mapping>>(),
+             "define a rename mapping")
+            ("skeleton,k",
+             po::value<std::string>(),
+             "pick skeleton to instantiate");
+        po::positional_options_description positional;
+        positional.add("skeleton", -1);
+        po::variables_map conf;
+        po::store(po::command_line_parser(argc, argv)
+                  .options(desc)
+                  .positional(positional)
+                  .run(), conf);
+        po::notify(conf);
+        return create_session(desc, conf);
+    } catch( boost::program_options::required_option const& e ) {
+        throw skel::invalid_user_interface_input();
+    }
 }
-}
+}  // local namespace
 
 namespace skel {
 application::application(int argc, char const * const argv[])
