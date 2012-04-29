@@ -53,7 +53,7 @@ void parse_macro(skel::scanner& s, std::ostream& out,
 
 void parse_eos(skel::scanner& s)
 {
-    skel::token t(s.scan());
+    s.scan();
 }
 }  // namespace
 
