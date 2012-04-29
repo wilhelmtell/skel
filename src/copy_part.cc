@@ -1,6 +1,7 @@
 #include "copy_part.hh"
 #include <boost/filesystem.hpp>
 #include <algorithm>
+#include "skeleton_instantiation_error.hh"
 
 namespace fs = boost::filesystem3;
 
@@ -9,6 +10,10 @@ copy_part::copy_part(fs::path const& from, fs::path const& to)
 : owning(true)
 , to(to.string())
 {
+    if( fs::exists(to) ) {
+        auto const m = std::string("File ") + this->to + " already exists.";
+        throw skel::skeleton_instantiation_error(m);
+    }
     fs::copy(from, to);
 }
 

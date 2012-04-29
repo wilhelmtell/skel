@@ -9,6 +9,7 @@
 #include <numeric>
 #include <map>
 #include "instantiate_parts.hh"
+#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem3;
 

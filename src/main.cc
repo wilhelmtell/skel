@@ -46,7 +46,7 @@ int main(int argc, char const * const argv[])
         std::cerr << "skeleton syntax error: " << e.what() << '\n';
         return 0x7ffe;
     } catch( skel::skeleton_instantiation_error const& e ) {
-        std::cerr << "skeleton instantiation error.\n";
+        std::cerr << "skeleton instantiation error: " << e.what() << '\n';
         return 0x7ffd;
     } catch( std::exception const& e ) {
         unknown_error(e);

@@ -3,19 +3,12 @@
 
 #include "renames_atom.tcc"
 #include <utility>
-#include "skeleton_instantiation_error.hh"
-
-namespace skel { struct rename_files_error; }
 
 namespace skel {
 template<typename... Args>
 void renames_atom::add(Args&&... args)
 {
-    try {
-        renames.push_back(mv(std::forward<Args>(args)...));
-    } catch( skel::rename_files_error const& e ) {
-        throw skel::skeleton_instantiation_error();
-    }
+    renames.push_back(mv(std::forward<Args>(args)...));
 }
 }  // namespace skel
 

@@ -1,7 +1,7 @@
 #include "mv.hh"
 #include <boost/filesystem.hpp>
 #include <string>
-#include "rename_files_error.hh"
+#include "skeleton_instantiation_error.hh"
 #include <algorithm>
 
 namespace fs = boost::filesystem3;
@@ -13,7 +13,7 @@ mv::mv(fs::path const& from, fs::path const& to)
 , to(to.string())
 {
     if( fs::exists(to) )
-        throw skel::rename_files_error(this->to + " already exists");
+        throw skel::skeleton_instantiation_error(this->to + " already exists");
     fs::rename(from, to);
 }
 

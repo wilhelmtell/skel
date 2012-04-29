@@ -1,5 +1,4 @@
 #include "rename_files.hh"
-#include "rename_files_error.hh"
 #include <boost/filesystem.hpp>
 #include <algorithm>
 #include <map>
