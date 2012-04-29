@@ -1,13 +1,40 @@
 #include "scanner.hh"
 #include <iostream>
-#include <queue>
 #include <sstream>
 #include <string>
 
-namespace {
-std::queue<skel::token> tokens_queue;
+namespace skel {
+token::token(token_t type)
+: type(type)
+{
+}
 
-void scan_force(std::istream& in)
+token::token(token_t type, std::string const& value)
+: type(type)
+, value(value)
+{
+}
+
+scanner::scanner(std::istream& in)
+: in(in)
+{
+}
+
+token scanner::peek()
+{
+    if( tokens_queue.empty() )
+        scan_force();
+    return tokens_queue.front();
+}
+
+token scanner::scan()
+{
+    if( tokens_queue.empty() )
+        scan_force();
+    return scan_cache();
+}
+
+void scanner::scan_force()
 {
     char c;
     if( ! in.get(c) ) {
@@ -41,37 +68,10 @@ void scan_force(std::istream& in)
     }
 }
 
-skel::token scan_cache()
+skel::token scanner::scan_cache()
 {
     auto const cached = tokens_queue.front();
     tokens_queue.pop();
     return cached;
-}
-}  // namespace
-
-namespace skel {
-token::token(token_t type)
-: type(type)
-{
-}
-
-token::token(token_t type, std::string const& value)
-: type(type)
-, value(value)
-{
-}
-
-token peek(std::istream& in)
-{
-    if( tokens_queue.empty() )
-        scan_force(in);
-    return tokens_queue.front();
-}
-
-token scan(std::istream& in)
-{
-    if( tokens_queue.empty() )
-        scan_force(in);
-    return scan_cache();
 }
 }  // namespace skel

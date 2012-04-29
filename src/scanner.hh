@@ -3,6 +3,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <queue>
 
 namespace skel {
 struct token {
@@ -14,14 +15,27 @@ struct token {
         MACRO,
         EOS
     } type;
-    std::string value;
 
     token(token_t type);
     token(token_t type, std::string const& value);
+
+    std::string value;
 };
 
-token peek(std::istream& in);
-token scan(std::istream& in);
+struct scanner {
+    scanner(std::istream& in);
+
+    token peek();
+    token scan();
+
+private:
+    void scan_force();
+    token scan_cache();
+
+private:
+    std::istream& in;
+    std::queue<skel::token> tokens_queue;
+};
 }  // namespace skel
 
 #endif  // SCANNER_HH_
