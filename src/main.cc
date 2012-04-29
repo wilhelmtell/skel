@@ -1,9 +1,9 @@
 #include "application.hh"
 #include <iostream>
 #include "parser_error.hh"
-#include "rename_files_error.hh"
 #include <boost/program_options/errors.hpp>
 #include "invalid_user_interface_input.hh"
+#include "skeleton_instantiation_error.hh"
 
 #ifndef NDEBUG
 #  include <execinfo.h>
@@ -45,8 +45,8 @@ int main(int argc, char const * const argv[])
     } catch( skel::syntax_error const& e ) {
         std::cerr << "skeleton syntax error: " << e.what() << '\n';
         return 0x7ffe;
-    } catch( skel::rename_files_error const& e ) {
-        std::cerr << "rename error: " << e.what() << '\n';
+    } catch( skel::skeleton_instantiation_error const& e ) {
+        std::cerr << "skeleton instantiation error.\n";
         return 0x7ffd;
     } catch( std::exception const& e ) {
         unknown_error(e);
