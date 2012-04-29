@@ -25,25 +25,13 @@ std::string unknown_error_message()
         "love to fix it, but i need to know about it first.\n";
 }
 
-void unknown_error(std::runtime_error const& e)
+void unknown_error(std::exception const& e)
 {
     std::cerr
         << "unknown runtime error: " << e.what() << "\n\n"
         << unknown_error_message();
 }
-
-void unknown_error(std::logic_error const& e)
-{
-    std::cerr
-        << "unknown logic error: " << e.what() << "\n\n"
-        << unknown_error_message();
-}
-
-void unknown_error()
-{
-    std::cerr << "unknown error\n\n" << unknown_error_message();
-}
-}
+}  // local namespace
 
 int main(int argc, char const * const argv[])
 {
@@ -59,16 +47,8 @@ int main(int argc, char const * const argv[])
     } catch( skel::rename_files_error const& e ) {
         std::cerr << "rename error: " << e.what() << '\n';
         return 0x7ffd;
-    } catch( std::runtime_error const& e ) {
+    } catch( std::exception const& e ) {
         unknown_error(e);
-        DEBUG_THROW;
-        return 3;
-    } catch( std::logic_error const& e ) {
-        unknown_error(e);
-        DEBUG_THROW;
-        return 2;
-    } catch( ... ) {
-        unknown_error();
         DEBUG_THROW;
         return 1;
     }
