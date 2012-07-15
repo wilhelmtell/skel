@@ -11,7 +11,7 @@
 #include "instantiate_parts.hh"
 #include <boost/filesystem.hpp>
 
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 
 namespace skel {
 instantiate_skeleton::instantiate_skeleton(std::string const& name,

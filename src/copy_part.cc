@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "skeleton_instantiation_error.hh"
 
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 
 namespace skel {
 copy_part::copy_part(fs::path const& from, fs::path const& to)

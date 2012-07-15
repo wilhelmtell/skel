@@ -6,7 +6,7 @@
 
 namespace skel {
 struct mv {
-    mv(boost::filesystem3::path const& from, boost::filesystem3::path const& to);
+    mv(boost::filesystem::path const& from, boost::filesystem::path const& to);
     ~mv() noexcept;
     mv(mv&& rhs);
     mv(mv const&) = delete;

@@ -8,8 +8,8 @@
 
 namespace skel {
 struct instantiate_part {
-    instantiate_part(boost::filesystem3::path const& from,
-                     boost::filesystem3::path const& to,
+    instantiate_part(boost::filesystem::path const& from,
+                     boost::filesystem::path const& to,
                      std::map<std::string,std::string> const& mappings);
 
     void commit();

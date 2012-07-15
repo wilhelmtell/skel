@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 
 namespace skel {
 instantiate_part::instantiate_part(fs::path const& from, fs::path const& to,

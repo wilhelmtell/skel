@@ -4,7 +4,7 @@
 #include "skeleton_instantiation_error.hh"
 #include <algorithm>
 
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 
 namespace skel {
 mv::mv(fs::path const& from, fs::path const& to)

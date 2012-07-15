@@ -6,8 +6,8 @@
 
 namespace skel {
 struct copy_part {
-    copy_part(boost::filesystem3::path const& from,
-              boost::filesystem3::path const& to);
+    copy_part(boost::filesystem::path const& from,
+              boost::filesystem::path const& to);
     copy_part(copy_part const&) = delete;
     copy_part& operator=(copy_part const&) = delete;
     copy_part(copy_part&& rhs);

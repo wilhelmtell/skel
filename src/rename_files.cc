@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-namespace fs = boost::filesystem3;
+namespace fs = boost::filesystem;
 
 namespace skel {
 rename_files::rename_files(std::map<std::string,std::string> const& mappings)
