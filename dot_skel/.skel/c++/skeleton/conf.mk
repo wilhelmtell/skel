@@ -1,0 +1,4 @@
+PREFIX ?= /usr/local
+# DEBUG = 1
+# SYNTAX_ONLY = 1
+# EXTRA_WARNINGS = 1
