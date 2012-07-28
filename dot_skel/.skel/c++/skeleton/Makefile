@@ -5,9 +5,9 @@ ifndef PREFIX
   export PREFIX := /usr/local
 endif
 
-.PHONY: $(PRODUCT) all clean distclean check tests install uninstall dist help
+.PHONY: $(PRODUCT) all clean distclean check install uninstall dist help
 
-check: tests
+check: $(PRODUCT)
 	${MAKE} --directory $(ROOTDIR)/test check
 
 # here we assume the default rule of each of our child makefiles is the
@@ -29,9 +29,6 @@ distclean:
 	${MAKE} --directory $(ROOTDIR)/test distclean
 	${MAKE} --directory $(ROOTDIR)/src distclean
 	rm -f $(PRODUCT)_$(VERSION).tar.gz
-
-tests: $(PRODUCT)
-	${MAKE} --directory $(ROOTDIR)/test tests
 
 install:
 	${MAKE} --directory $(ROOTDIR)/src install
