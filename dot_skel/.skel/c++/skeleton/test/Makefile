@@ -4,19 +4,19 @@ export PRODUCT = test_{APPNAME}
 OBJ := $(CURDIR)/main.o
 DEPS := $(OBJ:.o=.dep)
 
-.PHONY: clean distclean
+.PHONY: check clean distclean
 
 # see the comment of the $(PRODUCT) rule of the root makefile
 $(PRODUCT): $(OBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
 check: $(PRODUCT)
-	./$(PRODUCT) && touch check
+	./$(PRODUCT)
 
 all: check
 
 clean:
-	rm -f $(OBJ) $(DEPS) check
+	rm -f $(OBJ) $(DEPS)
 
 distclean: clean
 	rm -f $(PRODUCT)
