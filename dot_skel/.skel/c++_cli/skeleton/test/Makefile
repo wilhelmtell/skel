@@ -1,18 +1,16 @@
-include $(ROOTDIR)/test/conf.$(CXX).mk
+include $(ROOTDIR)/test/common.$(CXX).mk
 
-PRODUCT = test_$(PROJECT)
+export PRODUCT = test_{APPNAME}
 HDR :=
-SRC :=
+SRC := main.cc
 OBJ := $(foreach O,$(SRC:.cc=.o),$(CURDIR)/$(O))
-DEP := $(OBJ:.o=.dep)
-MAINSRC := main.cc
-MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
-LDFLAGS += -L../src -l$(PROJECT)
+DEPS := $(OBJ:.o=.dep)
 
 .PHONY: check clean distclean
 
+# LDFLAGS+=-lboost_filesystem
 # see the comment of the $(PRODUCT) rule of the root makefile
-$(PRODUCT): ../src/lib$(PROJECT).a $(OBJ) $(MAINOBJ)
+$(PRODUCT): $(OBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
 check: $(PRODUCT)
@@ -21,7 +19,7 @@ check: $(PRODUCT)
 all: check
 
 clean:
-	rm -f $(OBJ) $(DEP)
+	rm -f $(OBJ) $(DEPS)
 
 distclean: clean
 	rm -f $(PRODUCT)
@@ -30,7 +28,7 @@ distclean: clean
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MG -MM -MP -MT"$@" -MT"$(<:.cc=.o)" "$<" >"$@"
 
 ifneq "$(MAKECMDGOALS)" "clean"
-  ifneq "$(MAKECMDGOALS)" "distclean"
-    -include $(DEP)
-  endif
+ifneq "$(MAKECMDGOALS)" "distclean"
+  -include $(DEPS)
+endif
 endif

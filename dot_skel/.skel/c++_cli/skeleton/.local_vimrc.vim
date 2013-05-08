@@ -1,0 +1,10 @@
+set makeprg=make\ -s\ -j2\ -k
+set wildignore+=*.sw[op]
+set wildignore+=*.o
+set wildignore+=*.dep
+set wildignore+=gmon.out
+set wildignore+=src/acp
+set wildignore+=test/test_acp
+set wildignore+=test/check
+set wildignore+=include/acp
+set wildignore+=lib

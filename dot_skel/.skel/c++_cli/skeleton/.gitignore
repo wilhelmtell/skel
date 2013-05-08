@@ -1,0 +1,6 @@
+*.o
+*.dep
+*.sw[op]
+src/acp
+test/test_acp
+test/check

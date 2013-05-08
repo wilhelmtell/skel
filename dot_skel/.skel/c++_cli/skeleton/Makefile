@@ -1,15 +1,19 @@
-export PROJECT := {APPNAME}
+export PRODUCT := {APPNAME}
 export VERSION := {VERSION}
 export ROOTDIR := $(realpath $(CURDIR))
 
 include $(ROOTDIR)/conf.mk
 
-.PHONY: $(PROJECT) all clean distclean check install uninstall dist help
+.PHONY: $(PRODUCT) all clean distclean check install uninstall dist help
 
-check: $(PROJECT)
+check: $(PRODUCT)
 	${MAKE} --directory $(ROOTDIR)/test check
 
-$(PROJECT):
+# here we assume the default rule of each of our child makefiles is the
+# $(PRODUCT) rule. this allows us to refer to each child $(PRODUCT) rule with
+# "make". in contrast, "make $(PRODUCT)" would't work if any child makefile
+# redefines $(PRODUCT).
+$(PRODUCT):
 	${MAKE} --directory $(ROOTDIR)/src
 
 all:
@@ -23,7 +27,7 @@ clean:
 distclean:
 	${MAKE} --directory $(ROOTDIR)/test distclean
 	${MAKE} --directory $(ROOTDIR)/src distclean
-	rm -f $(PROJECT)_$(VERSION).tar.gz
+	rm -f $(PRODUCT)_$(VERSION).tar.gz
 
 install:
 	${MAKE} --directory $(ROOTDIR)/src install
@@ -34,7 +38,7 @@ uninstall:
 help:
 	@echo " AVAILABLE TARGETS:"
 	@echo
-	@echo "$(PROJECT)"
+	@echo "$(PRODUCT)"
 	@echo "all                    "
 	@echo "dist                   "
 	@echo "check         (default)"
@@ -45,4 +49,4 @@ help:
 	@echo
 
 dist:
-	git archive --prefix=$(PROJECT)_$(VERSION)/ --format=tar.gz -9 HEAD >$(PROJECT)_$(VERSION).tar.gz
+	git archive --prefix=$(PRODUCT)_$(VERSION)/ --format=tar.gz -9 HEAD >$(PRODUCT)_$(VERSION).tar.gz
