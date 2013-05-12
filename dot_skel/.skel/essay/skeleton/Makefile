@@ -1,9 +1,14 @@
 .PHONY: all clean distclean
 
-all: {NAME}.pdf
+SRC := {NAME}.tex
+PDF := $(SRC:.tex=.pdf)
+LOG := $(SRC:.tex=.log)
+AUX := $(SRC:.tex=.aux)
+
+all: $(PDF)
 clean:
-	rm -f {NAME}.log {NAME}.aux
+	rm -f $(LOG) $(AUX)
 distclean: clean
-	rm -f {NAME}.pdf
-{NAME}.pdf: {NAME}.tex
-	xelatex -file-line-error -interaction=nonstopmode $^
+	rm -f $(PDF)
+%.pdf: %.tex
+	xelatex -halt-on-error -file-line-error -interaction=nonstopmode $^

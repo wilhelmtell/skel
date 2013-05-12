@@ -1,0 +1,8 @@
+set wildignore+=q.log
+set wildignore+=texput.log
+set wildignore+=algorithm.aux
+set wildignore+=algorithm.log
+set wildignore+=algorithm.pdf
+set wildignore+=pointers.aux
+set wildignore+=pointers.log
+set wildignore+=pointers.pdf
