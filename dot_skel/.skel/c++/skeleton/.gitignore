@@ -1,5 +1,5 @@
 *.o
+*.a
 *.dep
-*.sw[op]
 src/{APPNAME}
 test/test_{APPNAME}

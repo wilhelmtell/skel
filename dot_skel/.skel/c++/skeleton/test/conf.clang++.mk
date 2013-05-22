@@ -1,3 +1,3 @@
-include $(ROOTDIR)/src/conf.clang++.mk
+include $(ROOTDIR)/conf.clang++.mk
 
-CPPFLAGS += -I$(ROOTDIR)/test/include
+CPPFLAGS += -I$(ROOTDIR)/test/include -DCATCH_CONFIG_CPP11_NULLPTR

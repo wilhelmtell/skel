@@ -1,5 +1,6 @@
 set wildignore+=*.sw[op]
 set wildignore+=*.o
+set wildignore+=*.a
 set wildignore+=*.dep
 set wildignore+=gmon.out
 set wildignore+=src/{APPNAME}

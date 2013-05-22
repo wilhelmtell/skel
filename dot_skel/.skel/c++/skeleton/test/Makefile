@@ -3,10 +3,12 @@ include $(ROOTDIR)/test/conf.$(CXX).mk
 PRODUCT = test_$(PROJECT)
 HDR :=
 SRC :=
-OBJ := $(foreach O,$(SRC:.cc=.o),$(CURDIR)/$(O))
-DEP := $(OBJ:.o=.dep)
+
 MAINSRC := main.cc
 MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
+MAINDEP := $(MAINOBJ:.o=.dep)
+OBJ := $(foreach O,$(SRC:.cc=.o),$(CURDIR)/$(O))
+DEP := $(OBJ:.o=.dep)
 LDFLAGS += -L../src -l$(PROJECT)
 
 .PHONY: check clean distclean
@@ -21,7 +23,7 @@ check: $(PRODUCT)
 all: check
 
 clean:
-	rm -f $(OBJ) $(DEP)
+	rm -f $(MAINOBJ) $(OBJ) $(MAINDEP) $(DEP)
 
 distclean: clean
 	rm -f $(PRODUCT)
@@ -31,6 +33,6 @@ distclean: clean
 
 ifneq "$(MAKECMDGOALS)" "clean"
   ifneq "$(MAKECMDGOALS)" "distclean"
-    -include $(DEP)
+    -include $(MAINDEP) $(DEP)
   endif
 endif
