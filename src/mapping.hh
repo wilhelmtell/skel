@@ -4,8 +4,7 @@
 #include <string>
 #include <iosfwd>
 #include <vector>
-
-namespace boost { struct any; }
+#include <boost/any.hpp>
 
 namespace skel {
 struct mapping {
