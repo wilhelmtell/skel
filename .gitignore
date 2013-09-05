@@ -1,6 +1,5 @@
-.*.sw[op]
 *.o
+*.a
 *.dep
-gmon.out
 src/skel
 test/test_skel

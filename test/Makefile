@@ -1,47 +1,45 @@
-include $(ROOTDIR)/test/common.mk
+include $(ROOTDIR)/test/conf.$(CXX).mk
 
-LDFLAGS += -lboost_regex \
-           -lboost_filesystem \
-           -lboost_system \
-           -lboost_program_options
-OBJ = $(CURDIR)/main.o \
-      $(CURDIR)/helpers.o \
-      $(ROOTDIR)/src/mapping.o \
-      $(ROOTDIR)/src/mv.o \
-      $(ROOTDIR)/src/renames_atom.o \
-      $(ROOTDIR)/src/rename_files.o \
-      $(ROOTDIR)/src/scanner.o \
-      $(ROOTDIR)/src/parser.o \
-      $(ROOTDIR)/src/copy_part.o \
-      $(ROOTDIR)/src/instantiate_part.o \
-      $(ROOTDIR)/src/instantiate_parts.o \
-      $(ROOTDIR)/src/instantiate_skeleton.o \
-      $(ROOTDIR)/src/print_message.o \
-      $(ROOTDIR)/src/session.o \
-      $(ROOTDIR)/src/application.o
-DEPS = $(OBJ:.o=.dep)
+PRODUCT = test_$(PROJECT)
+HDR :=
+SRC := helpers.cc
 
-.PHONY: check clean distclean tests
+MAINSRC := main.cc
+MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
+MAINDEP := $(MAINOBJ:.o=.dep)
+OBJ := $(foreach O,$(SRC:.cc=.o),$(CURDIR)/$(O))
+DEP := $(OBJ:.o=.dep)
+LDDIR := ../src
+LDLIB := $(PROJECT) \
+         boost_filesystem \
+         boost_system \
+         boost_regex \
+         boost_program_options
+LDFLAGS += $(foreach D,$(LDDIR),-L$D) \
+           $(foreach L,$(LDLIB),-l$L)
 
-check:
-	./test_skel
+.PHONY: check clean distclean
 
-clean:
-	rm -f $(OBJ) $(DEPS)
-
-distclean: clean
-	rm -f test_skel
-
-test_skel: $(OBJ)
+# see the comment of the $(PRODUCT) rule of the root makefile
+$(PRODUCT): ../src/lib$(PROJECT).a $(OBJ) $(MAINOBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
+check: $(PRODUCT)
+	./$(PRODUCT)
+
+all: check
+
+clean:
+	rm -f $(MAINOBJ) $(OBJ) $(MAINDEP) $(DEP)
+
+distclean: clean
+	rm -f $(PRODUCT)
+
 %.dep: %.cc
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(<:.cc=.o)" "$<"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MG -MM -MP -MT"$@" -MT"$(<:.cc=.o)" "$<" >"$@"
 
 ifneq "$(MAKECMDGOALS)" "clean"
-ifneq "$(MAKECMDGOALS)" "distclean"
-  -include $(DEPS)
+  ifneq "$(MAKECMDGOALS)" "distclean"
+    -include $(MAINDEP) $(DEP)
+  endif
 endif
-endif
-
-tests: test_skel
