@@ -16,7 +16,6 @@ struct renames_atom {
     void add(Args&&... args);
 
 private:
-    bool owning;
     std::vector<mv> renames;
 };
 }  // namespace skel

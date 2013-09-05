@@ -3,7 +3,6 @@
 
 namespace skel {
 renames_atom::renames_atom()
-: owning(true)
 {
 }
 
