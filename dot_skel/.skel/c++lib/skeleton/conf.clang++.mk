@@ -1,0 +1,31 @@
+include $(ROOTDIR)/conf.mk
+
+ifdef DEBUG
+  CXXFLAGS += -g -O0
+else
+  CXXFLAGS += -O2
+  LIBRARY_INSTALL_FLAGS += --strip
+  EXECUTABLE_INSTALL_FLAGS += --strip
+  MACROS += NDEBUG
+endif
+ifdef SYNTAX_ONLY
+  CXXFLAGS += -fsyntax-only
+endif
+INCLUDE_SEARCH_PATHS += $(ROOTDIR)/include
+
+SYSTEM_INCLUDE_SEARCH_PATHS +=
+
+HEADER_INSTALL_FLAGS += --mode=0644
+
+CXXFLAGS += -std=c++11 -stdlib=libc++ -Wall -Wextra -pedantic -Werror
+
+CPPFLAGS += $(foreach MACRO,$(MACROS),-D$(MACRO)) \\
+            $(foreach D,$(INCLUDE_SEARCH_PATHS),-I$D) \\
+            $(foreach D,$(SYSTEM_INCLUDE_SEARCH_PATHS),-isystem$D)
+
+LDFLAGS +=
+
+INSTALL ?= install
+HEADER_INSTALL = $(INSTALL) $(HEADER_INSTALL_FLAGS)
+LIBRARY_INSTALL = $(INSTALL) $(LIBRARY_INSTALL_FLAGS)
+EXECUTABLE_INSTALL = $(INSTALL) $(EXECUTABLE_INSTALL_FLAGS)
