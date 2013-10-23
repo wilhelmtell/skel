@@ -6,12 +6,15 @@ PRODUCT := $(EXE)
 MAINSRC := main.cc
 LIBHDR :=
 LIBSRC := perform.cc
+LDDIR := .
+LDLIB := $(EXE)
 
 MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
 MAINDEP := $(MAINOBJ:.o=.dep)
 LIBOBJ := $(foreach O,$(LIBSRC:.cc=.o),$(CURDIR)/$(notdir $(O)))
 LIBDEP := $(LIBOBJ:.o=.dep)
-LDFLAGS += -L. -l$(EXE)
+LDFLAGS += $(foreach D,$(LDDIR),-L$D) \\
+           $(foreach L,$(LDLIB),-l$L)
 
 .PHONY: all clean distclean install uninstall
 

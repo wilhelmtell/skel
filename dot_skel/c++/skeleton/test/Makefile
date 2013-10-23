@@ -3,13 +3,16 @@ include $(ROOTDIR)/test/conf.$(CXX).mk
 PRODUCT = test_$(PROJECT)
 HDR :=
 SRC :=
+LDDIR := ../src
+LDLIB := $(PROJECT)
 
 MAINSRC := main.cc
 MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
 MAINDEP := $(MAINOBJ:.o=.dep)
 OBJ := $(foreach O,$(SRC:.cc=.o),$(CURDIR)/$(O))
 DEP := $(OBJ:.o=.dep)
-LDFLAGS += -L../src -l$(PROJECT)
+LDFLAGS += $(foreach D,$(LDDIR),-L$D) \\
+           $(foreach L,$(LDLIB),-l$L)
 
 .PHONY: check clean distclean
 
