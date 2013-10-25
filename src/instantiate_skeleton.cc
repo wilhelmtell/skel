@@ -25,8 +25,7 @@ void instantiate_skeleton::execute()
 {
     static char const * const HOME = std::getenv("HOME");
     static char const * const RC_DIR = ".skel";
-    static char const * const SKELETON_DIR = "skeleton";
-    auto const from = fs::path(HOME) / RC_DIR / name / SKELETON_DIR;
+    auto const from = fs::path(HOME) / RC_DIR / name;
     auto const to = fs::current_path();
     auto const from_parent = from.parent_path();
     auto const parent_path_length = std::distance(from_parent.begin(),
