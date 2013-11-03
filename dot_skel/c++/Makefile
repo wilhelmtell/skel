@@ -39,8 +39,6 @@ uninstall:
 help:
 	@echo " AVAILABLE TARGETS:"
 	@echo
-	@echo "$(EXE)"
-	@echo "$(LIB)"
 	@echo "all                    "
 	@echo "dist                   "
 	@echo "check         (default)"
@@ -48,6 +46,8 @@ help:
 	@echo "uninstall              "
 	@echo "clean                  "
 	@echo "distclean              "
+	@echo "$(EXE)"
+	@echo "$(LIB)"
 	@echo
 
 dist:
