@@ -23,7 +23,7 @@ $(PRODUCT): ../src/lib$(PROJECT).a $(OBJ) $(MAINOBJ)
 check: $(PRODUCT)
 	./$(PRODUCT)
 
-all: check
+all: $(PRODUCT)
 
 clean:
 	rm -f $(MAINOBJ) $(OBJ) $(MAINDEP) $(DEP)

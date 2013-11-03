@@ -6,12 +6,12 @@ include $(ROOTDIR)/conf.mk
 
 .PHONY: all clean distclean check install uninstall dist help
 
-check:
-	$\{MAKE\} --directory $(ROOTDIR)/test check
-
 all:
 	$\{MAKE\} --directory $(ROOTDIR)/src all
 	$\{MAKE\} --directory $(ROOTDIR)/test all
+
+check:
+	$\{MAKE\} --directory $(ROOTDIR)/test check
 
 clean:
 	$\{MAKE\} --directory $(ROOTDIR)/test clean
@@ -31,9 +31,9 @@ uninstall:
 help:
 	@echo " AVAILABLE TARGETS:"
 	@echo
-	@echo "all                    "
+	@echo "all           (default)"
 	@echo "dist                   "
-	@echo "check         (default)"
+	@echo "check                  "
 	@echo "install                "
 	@echo "uninstall              "
 	@echo "clean                  "
