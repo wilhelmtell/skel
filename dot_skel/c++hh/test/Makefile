@@ -16,7 +16,6 @@ LDFLAGS += $(foreach D,$(LDDIR),-L$D) \\
 
 .PHONY: check clean distclean
 
-# see the comment of the $(PRODUCT) rule of the root makefile
 $(PRODUCT): $(OBJ) $(MAINOBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
