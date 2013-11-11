@@ -1,5 +1,5 @@
 export PROJECT := {APPNAME}
-export VERSION := {VERSION}
+export VERSION := $(shell git describe --dirty --always 2>/dev/null || echo 0)
 export ROOTDIR := $(realpath $(CURDIR))
 
 include $(ROOTDIR)/conf.mk
