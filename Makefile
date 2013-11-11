@@ -1,7 +1,7 @@
 export PROJECT := skel
 export EXE := $(PROJECT)
 export LIB := lib$(PROJECT).a
-export VERSION := 0.1
+export VERSION := $(shell git describe --dirty --always 2>/dev/null || echo 0)
 export ROOTDIR := $(realpath $(CURDIR))
 
 include $(ROOTDIR)/conf.mk
