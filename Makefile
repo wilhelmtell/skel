@@ -8,6 +8,10 @@ include $(ROOTDIR)/conf.mk
 
 .PHONY: all clean distclean check install uninstall dist help
 
+all:
+	${MAKE} --directory $(ROOTDIR)/src all
+	${MAKE} --directory $(ROOTDIR)/test all
+
 check: $(LIB)
 	${MAKE} --directory $(ROOTDIR)/test check
 
@@ -16,10 +20,6 @@ $(EXE):
 
 $(LIB):
 	${MAKE} --directory $(ROOTDIR)/src $(LIB)
-
-all:
-	${MAKE} --directory $(ROOTDIR)/src all
-	${MAKE} --directory $(ROOTDIR)/test all
 
 clean:
 	${MAKE} --directory $(ROOTDIR)/test clean
@@ -41,9 +41,9 @@ help:
 	@echo
 	@echo "$(EXE)"
 	@echo "$(LIB)"
-	@echo "all                    "
+	@echo "all           (default)"
 	@echo "dist                   "
-	@echo "check         (default)"
+	@echo "check                  "
 	@echo "install                "
 	@echo "uninstall              "
 	@echo "clean                  "
