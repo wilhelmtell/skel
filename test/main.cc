@@ -8,6 +8,6 @@
 namespace fs = boost::filesystem;
 
 TEST_CASE("rollback on error", "rollback on error as if skel never ran") {
-    fixtures::pushd_temporary_directory temp_dir;
+    fix::pushd_temporary_directory temp_dir;
     make_application("--skeleton c++").exec();
 }
