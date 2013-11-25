@@ -16,13 +16,13 @@ LDFLAGS += $(foreach D,$(LDDIR),-L$D) \\
 
 .PHONY: check clean distclean
 
+all: $(PRODUCT)
+
 $(PRODUCT): $(OBJ) $(MAINOBJ)
 	$(LINK.cc) $(OUTPUT_OPTION) $^
 
 check: $(PRODUCT)
 	./$(PRODUCT)
-
-all: check
 
 clean:
 	rm -f $(MAINOBJ) $(OBJ) $(MAINDEP) $(DEP)
