@@ -1,6 +1,5 @@
 include $(ROOTDIR)/src/conf.$(CXX).mk
 
-MAINSRC := main.cc
 LIBHDR :=
 
 .PHONY: all clean distclean install uninstall
