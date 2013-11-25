@@ -4,7 +4,7 @@ PRODUCT = test_$(PROJECT)
 HDR :=
 SRC :=
 LDDIR :=
-LDLIB := $(PROJECT)
+LDLIB :=
 
 MAINSRC := main.cc
 MAINOBJ := $(CURDIR)/$(notdir $(MAINSRC:.cc=.o))
