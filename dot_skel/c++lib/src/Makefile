@@ -35,8 +35,8 @@ endif
 
 install: all
 	mkdir --parents $(PREFIX)/lib/ $(PREFIX)/include/$(PROJECT)/
-	$(INSTALL) $(INSTALLFLAGS) $(LIB) $(PREFIX)/lib/$(LIB)
-	$(INSTALL) $(INSTALLFLAGS) $(LIBHDR) $(PREFIX)/include/$(PROJECT)/
+	$(INSTALL_LIBRARY) $(LIB) $(PREFIX)/lib/$(LIB)
+	$(INSTALL_HEADER) $(LIBHDR) $(PREFIX)/include/$(PROJECT)/
 
 uninstall:
 	rm -f $(PREFIX)/lib/$(LIB)

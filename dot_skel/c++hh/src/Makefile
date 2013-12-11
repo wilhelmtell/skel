@@ -13,7 +13,7 @@ distclean: clean
 
 install: all
 	mkdir --parents $(PREFIX)/include/$(PROJECT)/
-	$(INSTALL) $(INSTALLFLAGS) $(LIBHDR) $(PREFIX)/include/$(PROJECT)/
+	$(INSTALL_HEADER) $(LIBHDR) $(PREFIX)/include/$(PROJECT)/
 
 uninstall:
 	rm -f $(foreach H,$(LIBHDR),$(PREFIX)/include/$(PROJECT)/$(H))
