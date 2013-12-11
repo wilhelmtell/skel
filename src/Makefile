@@ -80,7 +80,7 @@ endif
 
 install: all
 	mkdir --parents $(PREFIX)/bin/
-	$(INSTALL) $(INSTALLFLAGS) $(PRODUCT) $(PREFIX)/bin/$(PRODUCT)
+	$(INSTALL) $(PRODUCT) $(PREFIX)/bin/$(PRODUCT)
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(PRODUCT)
