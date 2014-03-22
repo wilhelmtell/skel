@@ -1,4 +1,5 @@
 let g:ctrlp_custom_ignore = \{
-      \\ 'file': '\\v<(\\.deps|Makefile(\\.in)?|aclocal\\.m4|ar-lib|compile|config(ure|\\.(cache|h(\\.in)?|log|status))|depcomp|install-sh|missing|src/{APPNAME}|test/check_{APPNAME}|stamp-h1)$|\\.(o|a|sw[op])$|<autom4te\\.cache>',
+      \\ 'file': '\\v<(\\.deps|Makefile(\\.in)?|aclocal\\.m4|ar-lib|compile|config(ure|\\.(cache|h(\\.in\~?)?|log|status))|depcomp|install-sh|missing|src/{APPNAME}|test/check_{APPNAME}|stamp-h1)$|\\.(o|a|sw[op])$',
+      \\ 'dir': '\\v^autom4te\\.cache$',
       \\ 'link': '\\v^include/{APPNAME}$',
       \\ \}
