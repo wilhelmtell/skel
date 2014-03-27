@@ -13,7 +13,7 @@
 #include <map>
 #include "session.hh"
 #include "invalid_user_interface_input.hh"
-#include "../config.h"
+#include "config.h"
 
 namespace po = boost::program_options;
 
