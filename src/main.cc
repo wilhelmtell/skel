@@ -48,6 +48,9 @@ int main(int argc, char const * const argv[])
     } catch( skel::skeleton_instantiation_error const& e ) {
         std::cerr << "skeleton instantiation error: " << e.what() << '\n';
         return 0x7ffd;
+    } catch( boost::program_options::error const& e ) {
+        std::cerr << "program options error: " << e.what() << '\n';
+        return 0x7ffc;
     } catch( std::exception const& e ) {
         unknown_error(e);
         DEBUG_THROW;
