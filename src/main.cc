@@ -21,9 +21,8 @@ std::string unknown_error_message()
     backtrace_symbols_fd(data, size, 2);
 #endif
     return
-        "will you be so kind and send me an email to matan.nassau@gmail.com\n"
-        "with step-by-step instructions on how to reproduce this error? i'd\n"
-        "love to fix it, but i need to know about it first.\n";
+        "if you send me an email at matan.nassau@gmail.com so i learn about\n"
+        "this then that would be splendid!\n";
 }
 
 void unknown_error(std::exception const& e)
