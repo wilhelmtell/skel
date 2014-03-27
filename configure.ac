@@ -1,4 +1,4 @@
-AC_INIT([skel], [0.1], [matan.nassau@gmail.com])
+AC_INIT([skel], m4_esyscmd_s([git describe --dirty]), [matan.nassau@gmail.com])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_PROG_CXX
 AC_PROG_RANLIB
