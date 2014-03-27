@@ -1,4 +1,4 @@
-AC_INIT([{APPNAME}], m4_esyscmd_s([git describe --dirty]), [{AUTHOREMAIL}])
+AC_INIT([{APPNAME}], m4_esyscmd_s([git describe --dirty 2>/dev/null || echo v0.1]), [{AUTHOREMAIL}])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_PROG_CXX
 AC_PROG_RANLIB
