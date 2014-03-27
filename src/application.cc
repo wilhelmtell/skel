@@ -13,6 +13,7 @@
 #include <map>
 #include "session.hh"
 #include "invalid_user_interface_input.hh"
+#include "../config.h"
 
 namespace po = boost::program_options;
 
@@ -24,6 +25,11 @@ create_session(po::options_description const& desc, po::variables_map const& con
     if( conf.count("help") ) {
         std::ostringstream ss;
         ss << " Usage: skel [options] [--skeleton=]<skeleton>\n\n" << desc;
+        work.add(mn::make_unique<skel::print_message>(ss.str()));
+    }
+    if( conf.count("version") ) {
+        std::ostringstream ss;
+        ss << PACKAGE_STRING << '\n';
         work.add(mn::make_unique<skel::print_message>(ss.str()));
     }
     if( conf.count("skeleton") ) {
@@ -58,6 +64,7 @@ skel::session parse_commandline(int argc, char const * const argv[])
         po::options_description desc("Options");
         desc.add_options()
             ("help,h", "display this help message")
+            ("version,v", "display version information")
             ("substitute,s",
              po::value<std::vector<skel::mapping>>(),
              "define a substitution mapping")
